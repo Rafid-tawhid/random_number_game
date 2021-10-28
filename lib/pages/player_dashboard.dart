@@ -1,12 +1,16 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PlayerDashboard extends StatefulWidget {
 
+  static const String routeName='/page_player_dashboard';
   @override
   _PlayerDashboardState createState() => _PlayerDashboardState();
 }
@@ -87,5 +91,7 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
       ),
     );
   }
+
+
 
 }

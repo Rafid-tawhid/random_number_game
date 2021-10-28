@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:random_number_game/player_dashboard.dart';
-import 'package:random_number_game/profile_page.dart';
+
+import 'package:random_number_game/pages/profile_page.dart';
 
 import 'contact_page.dart';
 
-import 'custom_widget/custom_drawer.dart';
-import 'main.dart';
+import '../custom_widget/custom_drawer.dart';
+import '../main.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  static const String routeName='/splash_screen';
 
   @override
   _SplashScreenState createState() => _SplashScreenState();

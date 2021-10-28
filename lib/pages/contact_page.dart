@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 
 class ContactPage extends StatefulWidget {
-  const ContactPage({Key? key}) : super(key: key);
+  static const String routeName='/page_contact';
 
   @override
   _ContactPageState createState() => _ContactPageState();

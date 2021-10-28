@@ -6,27 +6,40 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:random_number_game/login_page.dart';
-import 'package:random_number_game/splash_screen.dart';
+import 'package:random_number_game/pages/login_page.dart';
+import 'package:random_number_game/pages/player_dashboard.dart';
+import 'package:random_number_game/pages/profile_page.dart';
+import 'package:random_number_game/pages/splash_screen.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'custom_widget/custom_drawer.dart';
 
 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Scaffold(
 
-      backgroundColor: Colors.white,
       body: SplashScreen(),
     ),
+    initialRoute:SplashScreen.routeName,
+    routes: {
+      SplashScreen.routeName: (context) =>SplashScreen(),
+      PlayerDashboard.routeName: (context) =>PlayerDashboard(),
+      ProfilePage.routeName: (context) =>ProfilePage(),
+      HomePage.routeName: (context) =>HomePage(),
+
+    },
   ));
 }
 
 class HomePage extends StatefulWidget {
+  static const String routeName='/page_home';
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -52,7 +65,7 @@ class _HomePageState extends State<HomePage> {
   var _achivement='Concurer';
   var _date;
   DateTime now = DateTime.now();
-  bool startTimerFirst=true;
+
 
 
   String nameS="Bot User",idS="10",cityS="Dhaka";
@@ -101,10 +114,7 @@ class _HomePageState extends State<HomePage> {
     _rollTheDice();
 
     _readHigestScore();
-    if(startTimerFirst){
-      startTimer();
-      startTimerFirst=false;
-    }
+
 
 
     return Center(
@@ -358,6 +368,7 @@ class _HomePageState extends State<HomePage> {
   void _rollTheDice() {
 
 
+
     if(_score>_higestScore)
     {
       _higestScore=_score;
@@ -597,6 +608,7 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
+
 
 }
 

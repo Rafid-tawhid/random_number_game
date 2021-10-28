@@ -1,17 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:random_number_game/main.dart';
-import 'package:random_number_game/splash_screen.dart';
+import 'package:random_number_game/models/facebook_login_controller.dart';
+import 'package:random_number_game/pages/fb_page.dart';
+import 'package:random_number_game/pages/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'custom_widget/custom_drawer.dart';
-import 'custom_widget/google_login_controller.dart';
+import '../custom_widget/custom_drawer.dart';
+import '../custom_widget/google_login_controller.dart';
+
+
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  static const String routeName='/page_profile';
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -23,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController idController = new TextEditingController();
   TextEditingController cityController = new TextEditingController();
   final controler = Get.put(LoginController());
+  final fbcontroler = Get.put(facebookSignInWithController());
 
   String imgUrl='https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg';
 
@@ -116,6 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               name = nameController.text;
                               userId = idController.text;
                               city = cityController.text;
+
                             });
                             saveDataToSharedPref(name, userId, city);
                             Navigator.push(
@@ -234,6 +242,7 @@ class _ProfilePageState extends State<ProfilePage> {
             onPressed: () {
               controler.login();
 
+
             },
             style: ElevatedButton.styleFrom(
 
@@ -248,8 +257,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 style: TextStyle(fontSize: 12),
               ),
             ),
-            onPressed: () {
+            onPressed: () async {
 
+              //
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => FbLogin()),
+              // );
+              await fbcontroler.login();
+              print(fbcontroler.userData.toString());
 
             },
             style: ElevatedButton.styleFrom(
@@ -270,4 +286,6 @@ class _ProfilePageState extends State<ProfilePage> {
     sharedPreferences.setString("ct", email);
     print("saved user value to SF");
   }
+
+
 }

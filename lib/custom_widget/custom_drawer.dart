@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:random_number_game/pages/player_dashboard.dart';
 
-import '../contact_page.dart';
-import '../player_dashboard.dart';
-import '../profile_page.dart';
+import '../pages/contact_page.dart';
+import '../pages/profile_page.dart';
 class CustomDrawer extends StatefulWidget {
 
   @override
