@@ -20,7 +20,7 @@ void main() async {
     home: Scaffold(
 
       backgroundColor: Colors.white,
-      body: LoginPage(),
+      body: SplashScreen(),
     ),
   ));
 }
