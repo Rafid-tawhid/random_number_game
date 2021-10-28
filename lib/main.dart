@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,7 +33,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  
+  late Timer _timer;
+  int _start = 120;
   var _score = 0;
   var _higestScore = 0;
   var _sum = 0;
@@ -46,14 +48,13 @@ class _HomePageState extends State<HomePage> {
   var c = 0;
   var d = 0;
   bool showMsg = false;
-  var _isGameOver = false;
-  var _id=0;
-  var _name='Rafid Tawhid';
   var _title='Legend';
-  var _city='Dhaka';
   var _achivement='Concurer';
   var _date;
   DateTime now = DateTime.now();
+  bool startTimerFirst=true;
+
+
   String nameS="Bot User",idS="10",cityS="Dhaka";
   List<int> list = [];
   final _random = Random.secure();
@@ -72,7 +73,11 @@ class _HomePageState extends State<HomePage> {
   ///
   ///
   late FToast fToast;
-
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -80,7 +85,13 @@ class _HomePageState extends State<HomePage> {
     fToast = FToast();
     fToast.init(context);
 
+
+
   }
+
+
+
+
 
 
   @override
@@ -88,7 +99,12 @@ class _HomePageState extends State<HomePage> {
 
     //initial call
     _rollTheDice();
+
     _readHigestScore();
+    if(startTimerFirst){
+      startTimer();
+      startTimerFirst=false;
+    }
 
 
     return Center(
@@ -97,14 +113,26 @@ class _HomePageState extends State<HomePage> {
 
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 12.0),
+              padding: const EdgeInsets.only(left: 12.0,right: 12),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Higest Score :$_higestScore',
-                    style: TextStyle(fontSize: 18,),
-                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                    children: [
+                      Text(
+                        'Higest Score :$_higestScore',
+                        style: TextStyle(fontSize: 18,),
+                      ),
+                      SizedBox(width: 110,),
+                      Text(
+                        'Timer:$_start',
+                        style: TextStyle(fontSize: 18,),
+                      ),
+                    ],
+                  )
+
 
                 ],
               ),
@@ -165,11 +193,6 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 20,
             ),
-            if (_isGameOver)
-              const Text(
-                "G A M E  O V E R",
-                style: TextStyle(fontSize: 30, color: Colors.red),
-              ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -460,9 +483,10 @@ class _HomePageState extends State<HomePage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0)),
                   child: new Text('Exit',style: TextStyle(color: Colors.white),),
-                  onPressed: () {
-                    _date=now.hour.toString() + ":" + now.minute.toString() + ":" + now.day.toString()+now.month.toString();
-                    fetchUsersData();
+                  onPressed: () async{
+                    _date="${now.year.toString()}-${now.month.toString().padLeft(2,'0')}-${now.day.toString().padLeft(2,'0')} ${now.hour.toString().padLeft(2,'0')}-${now.minute.toString().padLeft(2,'0')}";
+
+                     await fetchUsersDataFromSF();
 
                     _storeDatatoFirebase(idS,nameS,_score,_date,_higestScore,_title,cityS,_achivement);
 
@@ -483,10 +507,11 @@ class _HomePageState extends State<HomePage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0)),
                   child: new Text('Play',style: TextStyle(color: Colors.white),),
-                  onPressed: () {
+                  onPressed: () async{
                     customToastShow();
-                    _date=now.hour.toString() + ":" + now.minute.toString() + ":" + now.day.toString()+now.month.toString();
-                    _storeDatatoFirebase(idS,nameS,_score,_date,_higestScore,_title,cityS,_achivement);
+                    // await fetchUsersDataFromSF();
+                    // _date="${now.year.toString()}-${now.month.toString().padLeft(2,'0')}-${now.day.toString().padLeft(2,'0')} ${now.hour.toString().padLeft(2,'0')}-${now.minute.toString().padLeft(2,'0')}";
+                    // _storeDatatoFirebase(idS,nameS,_score,_date,_higestScore,_title,cityS,_achivement);
                   },
                 ),
               ],
@@ -523,13 +548,13 @@ class _HomePageState extends State<HomePage> {
       final key = 'my_int_key';
       final value = score;
       prefs.setInt(key, value);
-      print('saved $value');
+
   }
   _readHigestScore() async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'my_int_key';
     final value = prefs.getInt(key) ?? 0;
-    print('read: $value');
+
         _higestScore=value;
 
 
@@ -543,15 +568,35 @@ class _HomePageState extends State<HomePage> {
   }
 
 
-  Future<String> fetchUsersData() async {
+  Future<String> fetchUsersDataFromSF() async {
     final prefs = await SharedPreferences.getInstance();
 
-    nameS = prefs.getString("nm")!;
-    idS= prefs.getString("id")!;
-    cityS = prefs.getString("ct")!;
+    setState(() {
+      nameS = prefs.getString("nm")!;
+      idS= prefs.getString("id")!;
+      cityS = prefs.getString("ct")!;
+
+    });
+    print("Get User Value from SF:"+nameS+idS+cityS);
     return nameS;
   }
-
+  void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+          (Timer timer) {
+        if (_start == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            _start--;
+          });
+        }
+      },
+    );
+  }
 
 }
 

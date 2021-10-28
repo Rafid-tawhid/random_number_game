@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'custom_widget/custom_drawer.dart';
 import 'custom_widget/google_login_controller.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -17,22 +18,27 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
-  String name="Bot User",userId="10",city="Dhaka";
+  String name = "Bot User", userId = "10", city = "Dhaka";
   TextEditingController nameController = new TextEditingController();
   TextEditingController idController = new TextEditingController();
   TextEditingController cityController = new TextEditingController();
-  final controler= Get.put(LoginController());
+  final controler = Get.put(LoginController());
+
+  String imgUrl='https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg';
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(title: Text('Your Profile'),centerTitle: true ,  leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),),
+        appBar: AppBar(
+          title: Text('Your Profile'),
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
         body: ListView(
           children: [
             Column(
@@ -41,13 +47,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Expanded(
                       flex: 1,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(25.0),
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.white,
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.asset('img/pp.jpg',
-                            height: 80.0,
-                            width: 80.0,
+                          padding: const EdgeInsets.all(0.0),
+                          child: Image.network(imgUrl,
+                            height: 120.0,
+                            width: 120.0,
                           ),
                         ),
                       ),
@@ -62,21 +69,24 @@ class _ProfilePageState extends State<ProfilePage> {
                           decoration: InputDecoration(
                             // border: InputBorder.none,
                             hintText: 'ENTER YOUR NAME',
+
                             hintStyle: TextStyle(color: Colors.grey),
                           ),
-
                         ),
                       ),
-                    ),],),
-                SizedBox(height: 15,),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
-                  margin: EdgeInsets.only(left: 15,right: 15),
+                  margin: EdgeInsets.only(left: 15, right: 15),
                   child: Column(
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextField(
-
                           controller: idController,
                           textAlign: TextAlign.left,
                           decoration: InputDecoration(
@@ -84,7 +94,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             hintText: 'CHOSE USER ID',
                             hintStyle: TextStyle(color: Colors.grey),
                           ),
-
                         ),
                       ),
                       Padding(
@@ -94,42 +103,40 @@ class _ProfilePageState extends State<ProfilePage> {
                           textAlign: TextAlign.left,
                           decoration: InputDecoration(
                             // border: InputBorder.none,
-                            hintText: 'YOUR CITY',
+                            hintText: 'YOUR EMAIL',
                             hintStyle: TextStyle(color: Colors.grey),
                           ),
-
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 58),
                         child: RaisedButton(
-                          onPressed: (){
-
-                            name=nameController.text;
-                            userId=idController.text;
-                            city=cityController.text;
-                            saveDataToSharedPref(name,userId,city);
+                          onPressed: () {
+                            setState(() {
+                              name = nameController.text;
+                              userId = idController.text;
+                              city = cityController.text;
+                            });
+                            saveDataToSharedPref(name, userId, city);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => MaterialApp(
-                                    debugShowCheckedModeBanner: false,
-                                    home: Scaffold(
-                                      drawer: Drawer(
-                                        child: CustomDrawer(),
-                                      ),
-                                      appBar: AppBar(
-                                        title: const Text(
-                                          "G-Game",
+                                        debugShowCheckedModeBanner: false,
+                                        home: Scaffold(
+                                          drawer: Drawer(
+                                            child: CustomDrawer(),
+                                          ),
+                                          appBar: AppBar(
+                                            title: const Text(
+                                              "G-Game",
+                                            ),
+                                            centerTitle: true,
+                                          ),
+                                          body: HomePage(),
                                         ),
-                                        centerTitle: true,
-                                      ),
-                                      body: HomePage(),
-                                    ),
-                                  )
-                              ),
+                                      )),
                             );
-
                           },
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(80.0)),
@@ -137,44 +144,41 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Ink(
                             decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [Color(0xff374ABE), Color(0xff64B6FF)],
+                                  colors: [
+                                    Color(0xff374ABE),
+                                    Color(0xff64B6FF)
+                                  ],
                                   begin: Alignment.centerLeft,
                                   end: Alignment.centerRight,
                                 ),
                                 borderRadius: BorderRadius.circular(30.0)),
                             child: Container(
-
                               constraints: const BoxConstraints(
                                   maxWidth: 200.0, minHeight: 50.0),
                               alignment: Alignment.center,
                               child: Text(
-                                "Save",
+                                "Next",
                                 textAlign: TextAlign.center,
-                                style:
-                                TextStyle(color: Colors.white, fontSize: 15),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 15),
                               ),
-
                             ),
                           ),
                         ),
                       ),
+
                       Center(
-                        child:Obx((){
-                          if(controler.googleAccount.value == null)
-                          {
+                        child: Obx(() {
+                          if (controler.googleAccount.value == null) {
                             return buildLoginButton();
-                          }
-                          else
-                          {
+                          } else {
                             return buildProfileView();
                           }
                         }),
-                      )],
+                      )
+                    ],
                   ),
                 )
-
-
-
               ],
             ),
           ],
@@ -186,43 +190,84 @@ class _ProfilePageState extends State<ProfilePage> {
   Column buildProfileView() {
     return Column(
       children: [
-        CircleAvatar(
-          backgroundImage: Image.network(controler.googleAccount.value?.photoUrl ?? '').image,
-          radius: 60,
+        Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: CircleAvatar(
+            backgroundImage:
+                Image.network(controler.googleAccount.value?.photoUrl ?? '')
+                    .image,
+            radius: 45,
+          ),
+
         ),
         Text(controler.googleAccount.value?.displayName ?? ''),
         Text(controler.googleAccount.value?.email ?? ''),
+        ElevatedButton(onPressed: (){
+          setState(() {
+            nameController.text=controler.googleAccount.value?.displayName ?? '';
+            idController.text=controler.googleAccount.value?.id ?? '';
+            cityController.text=controler.googleAccount.value?.email ?? '';
+            imgUrl=controler.googleAccount.value?.photoUrl ?? '';
+
+          });
+        }, child: Text("Save"))
       ],
     );
   }
 
-  ElevatedButton buildLoginButton() {
-    return ElevatedButton(onPressed: (){
-      controler.login();
+  Padding buildLoginButton() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 158.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+
+        children: [
+          ElevatedButton(
+
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Text(
+                'Google',
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+            onPressed: () {
+              controler.login();
+
+            },
+            style: ElevatedButton.styleFrom(
+
+              shape: CircleBorder(),
+            ),
+          ),
+          ElevatedButton(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                'facebook',
+                style: TextStyle(fontSize: 12),
+              ),
+            ),
+            onPressed: () {
 
 
-    }, child: Text('Google'),
+            },
+            style: ElevatedButton.styleFrom(
+              shape: CircleBorder(),
+              primary: Colors.indigoAccent,
+            ),
+
+          ),
+        ],
+      ),
     );
   }
 
-
-
-
-  void saveDataToSharedPref(String name, String userId, String city) async {
+  void saveDataToSharedPref(String name, String userId, String email) async {
     var sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString("nm", name);
     sharedPreferences.setString("id", userId);
-    sharedPreferences.setString("ct", city);
-    print('address saved');
-
-
-
+    sharedPreferences.setString("ct", email);
+    print("saved user value to SF");
   }
-
-
-
-
-
-
-
 }
