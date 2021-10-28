@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
   var _achivement='Concurer';
   var _date;
   DateTime now = DateTime.now();
-  bool startTimerFirst=true;
+
 
 
   String nameS="Bot User",idS="10",cityS="Dhaka";
@@ -101,10 +101,7 @@ class _HomePageState extends State<HomePage> {
     _rollTheDice();
 
     _readHigestScore();
-    if(startTimerFirst){
-      startTimer();
-      startTimerFirst=false;
-    }
+
 
 
     return Center(
@@ -358,6 +355,7 @@ class _HomePageState extends State<HomePage> {
   void _rollTheDice() {
 
 
+
     if(_score>_higestScore)
     {
       _higestScore=_score;
@@ -597,6 +595,7 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
+
 
 }
 
