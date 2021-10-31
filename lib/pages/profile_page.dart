@@ -195,32 +195,32 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Column buildProfileView() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: CircleAvatar(
-            backgroundImage:
-                Image.network(controler.googleAccount.value?.photoUrl ?? '')
-                    .image,
-            radius: 45,
-          ),
+    buildProfileView() {
+    // return Column(
+    //   children: [
+    //     // Padding(
+    //     //   padding: const EdgeInsets.all(18.0),
+    //     //   child: CircleAvatar(
+    //     //     backgroundImage:
+    //     //         Image.network(controler.googleAccount.value?.photoUrl ?? '')
+    //     //             .image,
+    //     //     radius: 45,
+    //     //   ),
+    //     //
+    //     // ),
+    //     // Text(controler.googleAccount.value?.displayName ?? ''),
+    //     // Text(controler.googleAccount.value?.email ?? ''),
+    //
+    //
+    //   ],
+    // );
+    setState(() {
+      nameController.text=controler.googleAccount.value?.displayName ?? '';
+      idController.text=controler.googleAccount.value?.id ?? '';
+      cityController.text=controler.googleAccount.value?.email ?? '';
+      imgUrl=controler.googleAccount.value?.photoUrl ?? '';
 
-        ),
-        Text(controler.googleAccount.value?.displayName ?? ''),
-        Text(controler.googleAccount.value?.email ?? ''),
-        ElevatedButton(onPressed: (){
-          setState(() {
-            nameController.text=controler.googleAccount.value?.displayName ?? '';
-            idController.text=controler.googleAccount.value?.id ?? '';
-            cityController.text=controler.googleAccount.value?.email ?? '';
-            imgUrl=controler.googleAccount.value?.photoUrl ?? '';
-
-          });
-        }, child: Text("Save"))
-      ],
-    );
+    });
   }
 
   Padding buildLoginButton() {
@@ -242,7 +242,6 @@ class _ProfilePageState extends State<ProfilePage> {
             onPressed: () {
               controler.login();
 
-
             },
             style: ElevatedButton.styleFrom(
 
@@ -260,12 +259,12 @@ class _ProfilePageState extends State<ProfilePage> {
             onPressed: () async {
 
               //
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => FbLogin()),
-              // );
-              await fbcontroler.login();
-              print(fbcontroler.userData.toString());
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FbLogin()),
+              );
+              // await fbcontroler.login();
+              // print(fbcontroler.userData.toString());
 
             },
             style: ElevatedButton.styleFrom(

@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
   var c = 0;
   var d = 0;
   bool showMsg = false;
-  var _title = 'Legend';
+  String _title = 'Noob';
   var _achivement = 'Concurer';
   var _date;
   DateTime now = DateTime.now();
@@ -149,12 +149,14 @@ class _HomePageState extends State<HomePage> {
                   ),
                   if (showMsg == true)
                     // AnimatedText()
+
                     Center(
                       child: Image.asset(
                         'img/anim2.gif',
                         height: 150,
                         width: 200,
                       ),
+
                     )
                     // showCongoMsg()
                   else
@@ -379,8 +381,21 @@ class _HomePageState extends State<HomePage> {
 
     if (_score > _higestScore) {
       _higestScore = _score;
+
+      if(_score>5)
+      {
+       _title='amature';
+      }
+    if(_score>10)
+      {
+            _title='pro';
+      }
+      if(_score>15)
+      {
+        _title='legend';
+        }
+      }
       _saveLastScore(_higestScore);
-    }
 
     setState(() {
       _index1 = _random.nextInt(9);
@@ -415,7 +430,7 @@ class _HomePageState extends State<HomePage> {
 
     list = [rand1, rand2, rand3, sum];
     list.shuffle();
-    print(list);
+    // print(list);
 
     a = list[0];
     b = list[1];
@@ -425,14 +440,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   checkRes(int a) {
-    print(a);
+    // print(a);
     int aa = a;
     if (aa == _sum) {
-      _rollTheDice();
+      // _rollTheDice();
       setState(() {
         showMsg = true;
+        Future.delayed(const Duration(milliseconds: 800), () {
+            setState(() {
+              showMsg = false;
+            });
+        });
       });
       _score++;
+
     } else {
       print("ERROR");
       showToast();
@@ -573,7 +594,7 @@ class _HomePageState extends State<HomePage> {
     fToast.removeCustomToast();
     _score = 0;
 
-    _rollTheDice();
+    // _rollTheDice();
   }
 
   void _saveLastScore(int score) async {
@@ -592,6 +613,7 @@ class _HomePageState extends State<HomePage> {
 
   void _storeDatatoFirebase(
       id, name, int score, date, int higestScore, title, city, achivement) {
+
     Map<String, dynamic> data = {
       "id": id,
       "name": name,
