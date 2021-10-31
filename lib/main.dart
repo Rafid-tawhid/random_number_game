@@ -1,9 +1,10 @@
-
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:random_number_game/pages/login_page.dart';
@@ -14,38 +15,34 @@ import 'package:random_number_game/pages/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'custom_widget/custom_drawer.dart';
-
+import 'custom_widget/custom_text.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Scaffold(
-
       body: SplashScreen(),
     ),
-    initialRoute:SplashScreen.routeName,
+    initialRoute: SplashScreen.routeName,
     routes: {
-      SplashScreen.routeName: (context) =>SplashScreen(),
-      PlayerDashboard.routeName: (context) =>PlayerDashboard(),
-      ProfilePage.routeName: (context) =>ProfilePage(),
-      HomePage.routeName: (context) =>HomePage(),
-
+      SplashScreen.routeName: (context) => SplashScreen(),
+      PlayerDashboard.routeName: (context) => PlayerDashboard(),
+      ProfilePage.routeName: (context) => ProfilePage(),
+      HomePage.routeName: (context) => HomePage(),
     },
   ));
 }
 
 class HomePage extends StatefulWidget {
-  static const String routeName='/page_home';
+  static const String routeName = '/page_home';
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-
   late Timer _timer;
   int _start = 120;
   var _score = 0;
@@ -61,14 +58,13 @@ class _HomePageState extends State<HomePage> {
   var c = 0;
   var d = 0;
   bool showMsg = false;
-  var _title='Legend';
-  var _achivement='Concurer';
+  var _title = 'Legend';
+  var _achivement = 'Concurer';
   var _date;
   DateTime now = DateTime.now();
+  AudioPlayer player = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
 
-
-
-  String nameS="Bot User",idS="10",cityS="Dhaka";
+  String nameS = "Bot User", idS = "10", cityS = "Dhaka";
   List<int> list = [];
   final _random = Random.secure();
   final _diceList = <String>[
@@ -97,71 +93,80 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     fToast = FToast();
     fToast.init(context);
-
-
-
   }
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
-
     //initial call
     _rollTheDice();
 
     _readHigestScore();
 
-
-
     return Center(
       child: SingleChildScrollView(
         child: Column(
-
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 12.0,right: 12),
+              padding: const EdgeInsets.only(left: 12.0, right: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
                     children: [
                       Text(
                         'Higest Score :$_higestScore',
-                        style: TextStyle(fontSize: 18,),
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
                       ),
-                      SizedBox(width: 110,),
+                      SizedBox(
+                        width: 110,
+                      ),
                       Text(
                         'Timer:$_start',
-                        style: TextStyle(fontSize: 18,),
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
                       ),
                     ],
                   )
-
-
                 ],
               ),
             ),
-            SizedBox(height: 50,),
-
-            Text(
-              'Score :$_score',
-              style: TextStyle(fontSize: 24),
+            SizedBox(
+              height: 50,
             ),
-            SizedBox(height: 50,),
-            if (showMsg)
-              Center(
-                  child: Image.asset('img/anim2.gif',height: 150,width: 200,),)
-            else
-              Center(
-              child: Image.asset('img/anim3.gif',height: 150,width: 200,),
-
+            Container(
+              child: Column(
+                children: [
+                  Text(
+                    'Score :$_score',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  if (showMsg == true)
+                    // AnimatedText()
+                    Center(
+                      child: Image.asset(
+                        'img/anim2.gif',
+                        height: 150,
+                        width: 200,
+                      ),
+                    )
+                  else
+                    Center(
+                      child: Image.asset(
+                        'img/anim3.gif',
+                        height: 150,
+                        width: 200,
+                      ),
+                    ),
+                ],
               ),
+            ),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -233,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                               "$a",
                               textAlign: TextAlign.center,
                               style:
-                              TextStyle(color: Colors.white, fontSize: 15),
+                                  TextStyle(color: Colors.white, fontSize: 15),
                             ),
                           ),
                         ),
@@ -269,7 +274,7 @@ class _HomePageState extends State<HomePage> {
                               "$b",
                               textAlign: TextAlign.center,
                               style:
-                              TextStyle(color: Colors.white, fontSize: 15),
+                                  TextStyle(color: Colors.white, fontSize: 15),
                             ),
                           ),
                         ),
@@ -311,7 +316,7 @@ class _HomePageState extends State<HomePage> {
                               "$c",
                               textAlign: TextAlign.center,
                               style:
-                              TextStyle(color: Colors.white, fontSize: 15),
+                                  TextStyle(color: Colors.white, fontSize: 15),
                             ),
                           ),
                         ),
@@ -347,7 +352,7 @@ class _HomePageState extends State<HomePage> {
                               "$d",
                               textAlign: TextAlign.center,
                               style:
-                              TextStyle(color: Colors.white, fontSize: 15),
+                                  TextStyle(color: Colors.white, fontSize: 15),
                             ),
                           ),
                         ),
@@ -367,12 +372,15 @@ class _HomePageState extends State<HomePage> {
 
   void _rollTheDice() {
 
+    final player = AudioCache();
 
+    // call this method when desired
+    player.play('play.wav');
+    if (_score > _higestScore) {
 
-    if(_score>_higestScore)
-    {
-      _higestScore=_score;
+      _higestScore = _score;
       _saveLastScore(_higestScore);
+
     }
 
     setState(() {
@@ -427,64 +435,77 @@ class _HomePageState extends State<HomePage> {
       _score++;
     } else {
       print("ERROR");
-
       showToast();
-
     }
   }
 
-
   showToast() {
+
+    //buzzer sound
+    final player = AudioCache();
+    player.play('buzzer.wav');
+
+
     Widget toast = Container(
       height: 320,
       width: 300,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.0),
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.grey, //                   <--- border color
-          width: 1.0,
-        )
-      ),
+          borderRadius: BorderRadius.circular(15.0),
+          color: Colors.white,
+          border: Border.all(
+            color: Colors.grey, //                   <--- border color
+            width: 1.0,
+          )),
       child: Column(
         children: [
           Container(
             height: 70,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
-                color: Colors.red,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+              color: Colors.red,
             ),
-
-            child:Row(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.error,color: Colors.white,size: 30,),
+                Icon(
+                  Icons.error,
+                  color: Colors.white,
+                  size: 30,
+                ),
                 SizedBox(
                   width: 14.0,
                 ),
-                Center(child: Text("Wrong Answer",style: TextStyle(fontSize: 24,color: Colors.white),)),
-
+                Center(
+                    child: Text(
+                  "Wrong Answer",
+                  style: TextStyle(fontSize: 24, color: Colors.white),
+                )),
               ],
-
-
             ),
           ),
           Container(
-            height: 180
-            ,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Better Luck Next Time",style: TextStyle(fontSize: 20),),
-                SizedBox(
-                  height: 14.0,
-                ),
-                Text("Do You Want to Play Again ?",style: TextStyle(fontSize: 20),),
-              ],
+            height: 180,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Better Luck Next Time",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  SizedBox(
+                    height: 14.0,
+                  ),
+                  Text(
+                    "Do You Want to Play Again ?",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
             ),
-          ),),
+          ),
           Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -493,20 +514,24 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.grey,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0)),
-                  child: new Text('Exit',style: TextStyle(color: Colors.white),),
-                  onPressed: () async{
-                    _date="${now.year.toString()}-${now.month.toString().padLeft(2,'0')}-${now.day.toString().padLeft(2,'0')} ${now.hour.toString().padLeft(2,'0')}-${now.minute.toString().padLeft(2,'0')}";
+                  child: new Text(
+                    'Exit',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () async {
+                    _date =
+                        "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
 
-                     await fetchUsersDataFromSF();
+                    await fetchUsersDataFromSF();
 
-                    _storeDatatoFirebase(idS,nameS,_score,_date,_higestScore,_title,cityS,_achivement);
+                    _storeDatatoFirebase(idS, nameS, _score, _date,
+                        _higestScore, _title, cityS, _achivement);
 
                     fToast.removeCustomToast();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                SplashScreen()));
+                            builder: (BuildContext context) => SplashScreen()));
                     // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
                   },
                 ),
@@ -517,22 +542,25 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.red,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0)),
-                  child: new Text('Play',style: TextStyle(color: Colors.white),),
-                  onPressed: () async{
+                  child: new Text(
+                    'Play',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () async {
                     customToastShow();
-                    // await fetchUsersDataFromSF();
-                    // _date="${now.year.toString()}-${now.month.toString().padLeft(2,'0')}-${now.day.toString().padLeft(2,'0')} ${now.hour.toString().padLeft(2,'0')}-${now.minute.toString().padLeft(2,'0')}";
-                    // _storeDatatoFirebase(idS,nameS,_score,_date,_higestScore,_title,cityS,_achivement);
+                    await fetchUsersDataFromSF();
+                    _date =
+                        "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
+                    _storeDatatoFirebase(idS, nameS, _score, _date,
+                        _higestScore, _title, cityS, _achivement);
                   },
                 ),
               ],
             ),
           ),
-
         ],
       ),
     );
-
 
     fToast.showToast(
       child: toast,
@@ -540,62 +568,63 @@ class _HomePageState extends State<HomePage> {
       toastDuration: Duration(seconds: 20),
     );
 
-
     // Custom Toast Position
-
   }
 
   void customToastShow() {
     fToast.removeCustomToast();
-      _score=0;
+    _score = 0;
 
     _rollTheDice();
   }
 
   void _saveLastScore(int score) async {
-
-
-      final prefs = await SharedPreferences.getInstance();
-      final key = 'my_int_key';
-      final value = score;
-      prefs.setInt(key, value);
-
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'my_int_key';
+    final value = score;
+    prefs.setInt(key, value);
   }
+
   _readHigestScore() async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'my_int_key';
     final value = prefs.getInt(key) ?? 0;
-
-        _higestScore=value;
-
+    _higestScore = value;
 
   }
 
-  void _storeDatatoFirebase(id, name, int score, date, int higestScore, title, city, achivement) {
-    Map<String,dynamic> data={"id":id,"name":name,"title":title,"city":city,"score":score,"higest":higestScore,"date":date,"achivement":achivement};
+  void _storeDatatoFirebase(
+      id, name, int score, date, int higestScore, title, city, achivement) {
+    Map<String, dynamic> data = {
+      "id": id,
+      "name": name,
+      "title": title,
+      "city": city,
+      "score": score,
+      "higest": higestScore,
+      "date": date,
+      "achivement": achivement
+    };
     FirebaseFirestore.instance.collection("players").add(data);
-
-    
   }
-
 
   Future<String> fetchUsersDataFromSF() async {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
       nameS = prefs.getString("nm")!;
-      idS= prefs.getString("id")!;
+      idS = prefs.getString("id")!;
       cityS = prefs.getString("ct")!;
-
     });
-    print("Get User Value from SF:"+nameS+idS+cityS);
+    print("Get User Value from SF:" + nameS + idS + cityS);
     return nameS;
   }
+
   void startTimer() {
     const oneSec = const Duration(seconds: 1);
     _timer = new Timer.periodic(
       oneSec,
-          (Timer timer) {
+      (Timer timer) {
         if (_start == 0) {
           setState(() {
             timer.cancel();
@@ -608,14 +637,4 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-
-
 }
-
-
-
-
-
-
-
-
