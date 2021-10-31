@@ -156,6 +156,7 @@ class _HomePageState extends State<HomePage> {
                         width: 200,
                       ),
                     )
+                    // showCongoMsg()
                   else
                     Center(
                       child: Image.asset(
@@ -373,14 +374,12 @@ class _HomePageState extends State<HomePage> {
   void _rollTheDice() {
 
     final player = AudioCache();
-
     // call this method when desired
     player.play('play.wav');
-    if (_score > _higestScore) {
 
+    if (_score > _higestScore) {
       _higestScore = _score;
       _saveLastScore(_higestScore);
-
     }
 
     setState(() {
@@ -394,6 +393,7 @@ class _HomePageState extends State<HomePage> {
       // _score =_score +_index1 + _index2 + 2;
 
       suffle(_rand1, _rand2, _rand3, _sum);
+
     });
   }
 
@@ -440,11 +440,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   showToast() {
-
     //buzzer sound
     final player = AudioCache();
     player.play('buzzer.wav');
-
 
     Widget toast = Container(
       height: 320,
@@ -590,7 +588,6 @@ class _HomePageState extends State<HomePage> {
     final key = 'my_int_key';
     final value = prefs.getInt(key) ?? 0;
     _higestScore = value;
-
   }
 
   void _storeDatatoFirebase(
@@ -637,4 +634,20 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
+
+  showCongoMsg() {
+    Future.delayed(Duration(seconds: 2), () {
+      showDialog(
+          context: context,
+          builder: (_) => Center(
+                child: Image.asset(
+                  'img/anim2.gif',
+                  height: 150,
+                  width: 200,
+                ),
+              ));
+    });
+  }
+
+
 }
