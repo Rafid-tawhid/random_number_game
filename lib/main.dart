@@ -635,19 +635,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  showCongoMsg() {
-    Future.delayed(Duration(seconds: 2), () {
-      showDialog(
-          context: context,
-          builder: (_) => Center(
-                child: Image.asset(
-                  'img/anim2.gif',
-                  height: 150,
-                  width: 200,
-                ),
-              ));
-    });
-  }
-
 
 }

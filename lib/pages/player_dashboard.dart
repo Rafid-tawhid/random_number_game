@@ -18,6 +18,7 @@ class PlayerDashboard extends StatefulWidget {
 class _PlayerDashboardState extends State<PlayerDashboard> {
   final db = FirebaseFirestore.instance;
   late String name,id,city;
+  late String title;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -73,7 +74,7 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
                       subtitle: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(
+                       Text(
                             doc['title'],style: TextStyle(color: Colors.red),
                           ),
                           Text(
