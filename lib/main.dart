@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
   var c = 0;
   var d = 0;
   bool showMsg = false;
+
   String _title = 'Noob';
   var _achivement = 'Concurer';
   var _date;
@@ -94,6 +95,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     fToast = FToast();
     fToast.init(context);
+
   }
 
   @override
@@ -112,26 +114,19 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        'Higest Score :$_higestScore',
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 110,
-                      ),
-                      Text(
-                        'Timer:$_start',
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  )
+                  Text(
+                    'Higest Score :$_higestScore',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+
+                  Text(
+                    'Timer:$_start',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -149,7 +144,6 @@ class _HomePageState extends State<HomePage> {
                     height: 50,
                   ),
                   if (showMsg == true)
-                    // AnimatedText()
 
                     Center(
                       child: Image.asset(
@@ -644,20 +638,23 @@ class _HomePageState extends State<HomePage> {
 
   void startTimer() {
     const oneSec = const Duration(seconds: 1);
-    _timer = new Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (_start == 0) {
-          setState(() {
-            timer.cancel();
-          });
-        } else {
-          setState(() {
-            _start--;
-          });
-        }
-      },
-    );
+        _timer = new Timer.periodic(
+          oneSec,
+              (Timer timer) {
+            if (_start == 0) {
+              setState(() {
+                timer.cancel();
+              });
+            } else {
+              setState(() {
+                _start--;
+              });
+            }
+          },
+        );
+
+
+
   }
 
 
