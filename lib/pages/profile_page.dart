@@ -29,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController idController = new TextEditingController();
   TextEditingController cityController = new TextEditingController();
   final controler = Get.put(LoginController());
-  final fbcontroler = Get.put(facebookSignInWithController());
+  bool showInfo=true;
 
   String imgUrl='https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg';
 
@@ -40,6 +40,20 @@ class _ProfilePageState extends State<ProfilePage> {
       home: Scaffold(
         appBar: AppBar(
           title: Text('Your Profile'),
+          actions: [
+            IconButton(onPressed: () async {
+
+              Future.delayed(const Duration(milliseconds: 2000), () {
+               CircularProgressIndicator();
+                setState(() {
+                 controler.logout();
+
+                });
+
+              });
+              controler.logout();
+            }, icon: Icon(Icons.logout))
+          ],
           centerTitle: true,
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -175,6 +189,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
 
+
                       Center(
                         child: Obx(() {
                           if (controler.googleAccount.value == null) {
@@ -195,32 +210,44 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-    buildProfileView() {
-    // return Column(
-    //   children: [
-    //     // Padding(
-    //     //   padding: const EdgeInsets.all(18.0),
-    //     //   child: CircleAvatar(
-    //     //     backgroundImage:
-    //     //         Image.network(controler.googleAccount.value?.photoUrl ?? '')
-    //     //             .image,
-    //     //     radius: 45,
-    //     //   ),
-    //     //
-    //     // ),
-    //     // Text(controler.googleAccount.value?.displayName ?? ''),
-    //     // Text(controler.googleAccount.value?.email ?? ''),
-    //
-    //
-    //   ],
-    // );
-    setState(() {
-      nameController.text=controler.googleAccount.value?.displayName ?? '';
-      idController.text=controler.googleAccount.value?.id ?? '';
-      cityController.text=controler.googleAccount.value?.email ?? '';
-      imgUrl=controler.googleAccount.value?.photoUrl ?? '';
+  Visibility buildProfileView() {
 
-    });
+    return Visibility(
+      visible: showInfo,
+      child: Column(
+
+          children: [
+            Padding(
+
+              padding: const EdgeInsets.all(18.0),
+              child: CircleAvatar(
+                backgroundImage:
+                    Image.network(controler.googleAccount.value?.photoUrl ?? '')
+                        .image,
+                radius: 45,
+              ),
+
+            ),
+            Text(controler.googleAccount.value?.displayName ?? ''),
+            Text(controler.googleAccount.value?.email ?? ''),
+            ElevatedButton(onPressed: (){
+              setState(() {
+                showInfo=false;
+                nameController.text=controler.googleAccount.value?.displayName ?? '';
+                idController.text=controler.googleAccount.value?.id ?? '';
+                cityController.text=controler.googleAccount.value?.email ?? '';
+                imgUrl=controler.googleAccount.value?.photoUrl ?? '';
+
+              });
+            }, child: Text('Save Info')),
+
+
+          ],
+
+
+      ),
+    );
+
   }
 
   Padding buildLoginButton() {
@@ -241,6 +268,8 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             onPressed: () {
               controler.login();
+
+
 
             },
             style: ElevatedButton.styleFrom(

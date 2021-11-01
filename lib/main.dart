@@ -85,6 +85,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _timer.cancel();
+
     super.dispose();
   }
 
@@ -375,6 +376,7 @@ class _HomePageState extends State<HomePage> {
 
   void _rollTheDice() {
 
+
     final player = AudioCache();
     // call this method when desired
     player.play('play.wav');
@@ -634,6 +636,7 @@ class _HomePageState extends State<HomePage> {
       nameS = prefs.getString("nm")!;
       idS = prefs.getString("id")!;
       cityS = prefs.getString("ct")!;
+
     });
     print("Get User Value from SF:" + nameS + idS + cityS);
     return nameS;

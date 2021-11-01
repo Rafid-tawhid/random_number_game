@@ -1,6 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:provider/provider.dart';
 import 'package:random_number_game/models/facebook_login_controller.dart';
 
@@ -13,6 +18,7 @@ class FbLogin extends StatefulWidget {
 
 class _FbLoginState extends State<FbLogin> {
 
+  final fbcontroler = Get.put(facebookSignInWithController());
   Map? _userData;
   @override
   Widget build(BuildContext context) {
@@ -31,37 +37,50 @@ class _FbLoginState extends State<FbLogin> {
         body: Center(
           child: Column(
             children: [
-              ElevatedButton(child: Text('Log In'),
+              ElevatedButton(child: Text('Log Out'),
                   onPressed: () async {
 
-                    final result = await FacebookAuth.i.login(
-                        permissions: ["public_profile", "email"]
-                    );
-
-                    if (result.status == LoginStatus.success) {
-
-                      final userData = await FacebookAuth.i.getUserData(
-                        fields: "email,name",
-                      );
-
-                      setState(() {
-                        _userData = userData;
-                      });
-
-                      print("FB :"+_userData.toString());
-
-                    }
+               await fbcontroler.login();
+               print(facebookSignInWithController.userData.toString());
+                    // await FacebookAuth.i.logOut();
+                    // //
+                    // print("okkk");
+                    //       setState(() {
+                    //         _userData = null;
+                    //       });
+                    // final result = await FacebookAuth.i.login(
+                    //     permissions: ["public_profile", "email"]
+                    // );
+                    //
+                    // if (result.status == LoginStatus.success) {
+                    //
+                    //   final userData = await FacebookAuth.i.getUserData(
+                    //     fields: "email,name",
+                    //   );
+                    //
+                    //   setState(() {
+                    //     _userData = userData;
+                    //   });
+                    //
+                    //   print("FB :"+_userData.toString());
+                    //
+                    // }
 
                   }),
               Padding(
                 padding: const EdgeInsets.all(28.0),
-                child: ElevatedButton(child: Text('Log Out'),
-                    onPressed: () async {
-                      await FacebookAuth.i.logOut();
+                // child: ElevatedButton(child: Text('Log Out'),
+                //     onPressed: () async {
+                //       await FacebookAuth.i.logOut();
+                //
+                //       setState(() {
+                //         _userData = null;
+                //       });
+                //     }),
+                child: ElevatedButton(child: Text('Log IN FB'),
+                    onPressed: () {
 
-                      setState(() {
-                        _userData = null;
-                      });
+                  _loginfb();
                     }),
               ),
             ],
@@ -72,6 +91,26 @@ class _FbLoginState extends State<FbLogin> {
     );
 
   }
+
+  Future<UserCredential> _loginfb() async {
+
+      // Trigger the sign-in flow
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      // Create a credential from the access token
+      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+
+
+
+      // Once signed in, return the UserCredential
+      return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+
+
+  }
+
+
+
   // loginUi() {
   //
   //   return Consumer<facebookSignInWithController>(

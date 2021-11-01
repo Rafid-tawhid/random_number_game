@@ -5,11 +5,11 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 class facebookSignInWithController with ChangeNotifier{
 
 
-   Map? userData;
+  static Map? userData;
 
   login()async{
     var result=await FacebookAuth.i.login(
-      permissions: ["public_profile","email"]
+      permissions: ['public_profile','email']
     );
     if(result.status==LoginStatus.success){
       print('fb login success');
