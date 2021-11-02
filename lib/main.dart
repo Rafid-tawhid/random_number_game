@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:random_number_game/pages/log.dart';
 import 'package:random_number_game/pages/login_page.dart';
 import 'package:random_number_game/pages/player_dashboard.dart';
 import 'package:random_number_game/pages/profile_page.dart';
@@ -24,7 +25,7 @@ void main() async {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Scaffold(
-      body: SplashScreen(),
+      body:  HomePage(),
     ),
     initialRoute: SplashScreen.routeName,
     routes: {
@@ -32,6 +33,10 @@ void main() async {
       PlayerDashboard.routeName: (context) => PlayerDashboard(),
       ProfilePage.routeName: (context) => ProfilePage(),
       HomePage.routeName: (context) => HomePage(),
+      LoginPage.routeName:(context) =>LoginPage(),
+      Log.routeName:(context) =>Log(),
+
+
     },
   ));
 }

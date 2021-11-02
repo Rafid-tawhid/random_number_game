@@ -1,18 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
 import 'package:random_number_game/main.dart';
-import 'package:random_number_game/models/facebook_login_controller.dart';
-import 'package:random_number_game/pages/fb_page.dart';
-import 'package:random_number_game/pages/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../custom_widget/custom_drawer.dart';
 import '../custom_widget/google_login_controller.dart';
+import 'log.dart';
+import 'login_page.dart';
 
 
 
@@ -42,9 +37,9 @@ class _ProfilePageState extends State<ProfilePage> {
           title: Text('Your Profile'),
           actions: [
             IconButton(onPressed: () async {
-
+              CircularProgressIndicator();
               Future.delayed(const Duration(milliseconds: 2000), () {
-               CircularProgressIndicator();
+
                 setState(() {
                  controler.logout();
 
@@ -290,7 +285,7 @@ class _ProfilePageState extends State<ProfilePage> {
               //
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => FbLogin()),
+                MaterialPageRoute(builder: (context) => Log()),
               );
               // await fbcontroler.login();
               // print(fbcontroler.userData.toString());
