@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:random_number_game/auth/firebase_auth.dart';
+import 'package:random_number_game/pages/login_page.dart';
 
 import 'package:random_number_game/pages/profile_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'contact_page.dart';
 
@@ -15,6 +18,32 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
+
+
+
+  late String nameS,idS,emailS;
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController idController = new TextEditingController();
+  TextEditingController emailController = new TextEditingController();
+  late String userId,name,email;
+
+
+  @override
+  void initState() {
+
+    Future.delayed(Duration.zero,(){
+      if(FirebaseAuthService.current_user==null){
+        Navigator.pushReplacementNamed(context, LoginPage.routeName);
+      }
+      else
+      {
+        Navigator.pushReplacementNamed(context, HomePage.routeName);
+      }
+    });
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,44 +59,10 @@ class _SplashScreenState extends State<SplashScreen> {
                   Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Text(
-                      "Let's go..",
+                      "Lets go..",
                       style: TextStyle(
                           fontSize: 56, color: Colors.red, fontFamily: 'Cursive'),
                     ),
-                  ),
-                  FlatButton(
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 28.0, right: 28),
-                      child: new Text(
-                        ' Play ',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MaterialApp(
-                                  debugShowCheckedModeBanner: false,
-                                  home: Scaffold(
-                                    drawer: Drawer(
-                                      child: CustomDrawer(),
-                                    ),
-                                    appBar: AppBar(
-                                      title: const Text(
-                                        "G-Game",
-                                      ),
-                                      centerTitle: true,
-                                    ),
-                                    body: HomePage(),
-                                  ),
-                                )
-                        ),
-                      );
-                    },
                   ),
                 ],
               ),
@@ -77,4 +72,5 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
+
 }

@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../custom_widget/custom_drawer.dart';
 import '../custom_widget/google_login_controller.dart';
 import 'log.dart';
-import 'login_page.dart';
+import 'fb_login_page.dart';
 
 
 
@@ -22,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String name = "Bot User", userId = "10", city = "Dhaka";
   TextEditingController nameController = new TextEditingController();
   TextEditingController idController = new TextEditingController();
-  TextEditingController cityController = new TextEditingController();
+  TextEditingController emailController = new TextEditingController();
   final controler = Get.put(LoginController());
   bool showInfo=true;
 
@@ -40,16 +40,12 @@ class _ProfilePageState extends State<ProfilePage> {
               CircularProgressIndicator();
               Future.delayed(const Duration(milliseconds: 2000), () {
 
-                setState(() {
-                 controler.logout();
-
-                });
-
               });
               controler.logout();
             }, icon: Icon(Icons.logout))
           ],
           centerTitle: true,
+
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.of(context).pop(),
@@ -115,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextField(
-                          controller: cityController,
+                          controller: emailController,
                           textAlign: TextAlign.left,
                           decoration: InputDecoration(
                             // border: InputBorder.none,
@@ -131,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             setState(() {
                               name = nameController.text;
                               userId = idController.text;
-                              city = cityController.text;
+                              city = emailController.text;
 
                             });
                             saveDataToSharedPref(name, userId, city);
@@ -230,7 +226,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 showInfo=false;
                 nameController.text=controler.googleAccount.value?.displayName ?? '';
                 idController.text=controler.googleAccount.value?.id ?? '';
-                cityController.text=controler.googleAccount.value?.email ?? '';
+                emailController.text=controler.googleAccount.value?.email ?? '';
                 imgUrl=controler.googleAccount.value?.photoUrl ?? '';
 
               });

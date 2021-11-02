@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'dart:ui';
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:random_number_game/auth/firebase_auth.dart';
 import 'package:random_number_game/pages/log.dart';
+import 'package:random_number_game/pages/fb_login_page.dart';
 import 'package:random_number_game/pages/login_page.dart';
 import 'package:random_number_game/pages/player_dashboard.dart';
 import 'package:random_number_game/pages/profile_page.dart';
@@ -33,9 +37,9 @@ void main() async {
       PlayerDashboard.routeName: (context) => PlayerDashboard(),
       ProfilePage.routeName: (context) => ProfilePage(),
       HomePage.routeName: (context) => HomePage(),
-      LoginPage.routeName:(context) =>LoginPage(),
+      LoginPage.routeName: (context) => LoginPage(),
+      FacebookLoginPage.routeName:(context) =>FacebookLoginPage(),
       Log.routeName:(context) =>Log(),
-
 
     },
   ));
@@ -63,7 +67,7 @@ class _HomePageState extends State<HomePage> {
   var c = 0;
   var d = 0;
   bool showMsg = false;
-
+  bool _highScoreMsg = false;
   String _title = 'Noob';
   var _achivement = 'Concurer';
   var _date;
@@ -110,8 +114,24 @@ class _HomePageState extends State<HomePage> {
 
     _readHigestScore();
 
-    return Center(
-      child: SingleChildScrollView(
+    return Scaffold(
+      drawer: Drawer(
+        child: CustomDrawer(),
+      ),
+      appBar: AppBar(
+        title: const Text(
+          "G-Game",
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(onPressed: (){
+            FirebaseAuthService.logoutUser();
+            Navigator.pushReplacementNamed(context, SplashScreen.routeName);
+          }, icon: Icon(Icons.logout))
+        ],
+      ),
+
+      body: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
@@ -135,6 +155,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+
             SizedBox(
               height: 50,
             ),
@@ -382,7 +403,6 @@ class _HomePageState extends State<HomePage> {
 
     if (_score > _higestScore) {
       _higestScore = _score;
-
       if(_score>5)
       {
        _title='amature';
