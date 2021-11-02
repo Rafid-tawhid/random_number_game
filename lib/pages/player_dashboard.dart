@@ -34,7 +34,7 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
         ),
 
         body: StreamBuilder<QuerySnapshot>(
-          stream: db.collection('players').snapshots(),
+          stream: db.collection('players').orderBy('score',descending: true).snapshots(),
 
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -84,6 +84,7 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
                         ],
                       ),
                       trailing: Text(doc['score'].toString(),style: TextStyle(fontSize: 22),),
+
                     );
                   }).toList(),
                 ),

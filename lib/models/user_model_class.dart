@@ -4,7 +4,7 @@ class UserDetails{
   String? email;
   String? photoUrl;
 
-  UserDetails({this.displayName, this.email, this.photoUrl});
+  UserDetails({this.displayName, this.email, this.photoUrl, String? photoURL});
 
   UserDetails.fromJson(Map<String,dynamic> json){
     displayName=json["displayName"];

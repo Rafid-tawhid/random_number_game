@@ -1,84 +1,105 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-//
-//
-// class LoginPage extends StatefulWidget {
-//   const LoginPage({Key? key}) : super(key: key);
-//
-//   @override
-//   _LoginPageState createState() => _LoginPageState();
-// }
-//
-// class _LoginPageState extends State<LoginPage> {
-//
-//   loginPageUi(){
-//     return Consumer<LoginControler>(builder: (context,model,child){
-//       if(model.userDetails!=null){
-//
-//         return Center(
-//          child: alreadyLogIn(model),
-//         );
-//       }
-//       else{
-//        return notLogedIn();
-//       }
-//     });
-//
-//   }
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.white24,
-//       body: loginPageUi(),
-//     );
-//   }
-//
-//   alreadyLogIn(LoginControler model) {
-//     return Column(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       crossAxisAlignment: CrossAxisAlignment.center,
-//       children: [
-//         CircleAvatar(
-//           backgroundImage: Image.network(model.userDetails!.photoUrl ?? "").image,
-//
-//         ),
-//         SizedBox(
-//           height: 20,
-//         ),
-//
-//         Text(model.userDetails!.displayName ?? ""),
-//         SizedBox(
-//           height: 10,
-//         ),
-//         Text(model.userDetails!.email ?? ""),
-//         SizedBox(
-//           height: 20,
-//         ),
-//         ElevatedButton(onPressed: (){
-//           Provider.of<LoginControler>(context,listen: false).allowUsertoSignOut();
-//         }, child: Text("Logout")),
-//
-//       ],
-//     );
-//   }
-//
-//   notLogedIn() {
-//
-//     return Center(
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           Image.asset('img/plus.JPG'),
-//           GestureDetector(
-//             child: Image.asset('img/pp.jpg',width: 240,),
-//             onTap: (){
-//               Provider.of<FbLoginControler>(context,listen: false).allowUserToSignInFb();
-//             },
-//
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:random_number_game/controllers/login_controller.dart';
+
+class LoginPage extends StatefulWidget {
+  static const String routeName='/loginPage';
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+
+class _LoginPageState extends State<LoginPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Login App"),
+        centerTitle: true,
+        backgroundColor: Colors.redAccent,
+      ),
+
+      // body of our ui
+
+      body: loginUI(),
+    );
+  }
+
+  // creating a function loginUI
+
+  loginUI() {
+    // loggedINUI
+    // loginControllers
+
+    return Consumer<LoginController>(builder: (context, model, child) {
+      // if we are already logged in
+      if (model.userDetails != null) {
+        return Center(
+          child: loggedInUI(model),
+        );
+      } else {
+        return loginControllers(context);
+      }
+    });
+  }
+
+  loggedInUI(LoginController model) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+
+      // our ui will have 3 children, name, email, photo , logout button
+
+      children: [
+        CircleAvatar(
+          backgroundImage:
+          Image.network(model.userDetails!.photoUrl ?? "").image,
+          radius: 50,
+        ),
+
+        Text(model.userDetails!.displayName ?? ""),
+        Text(model.userDetails!.email ?? ""),
+
+        // logout
+        ActionChip(
+            avatar: Icon(Icons.logout),
+            label: Text("Logout"),
+            onPressed: () {
+              Provider.of<LoginController>(context, listen: true).logout();
+            })
+      ],
+    );
+  }
+
+  loginControllers(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          GestureDetector(
+              child: Image.asset(
+                "assets/google.png",
+                width: 240,
+              ),
+              onTap: () {
+                Provider.of<LoginController>(context, listen: false)
+                    .googleLogin();
+
+              }),
+          SizedBox(
+            height: 10,
+          ),
+          GestureDetector(
+              child: Image.asset(
+                "assets/fb.png",
+                width: 240,
+              ),
+              onTap: () {
+                Provider.of<LoginController>(context, listen: false)
+                    .facebooklogin();
+              }),
+        ],
+      ),
+    );
+  }
+}
