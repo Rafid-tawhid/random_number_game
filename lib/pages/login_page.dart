@@ -174,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
 
       if(user!=null){
         Navigator.pushReplacementNamed(context, HomePage.routeName);
-        print("Hello : "+FirebaseAuthService.current_user!.uid);
+        // print("Hello : "+FirebaseAuthService.current_user!.uid);
       }
     }
     on FirebaseAuthException catch (e){
