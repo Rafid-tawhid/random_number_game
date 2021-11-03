@@ -33,12 +33,14 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
 
     Future.delayed(Duration.zero,(){
+
       if(FirebaseAuthService.current_user==null){
         Navigator.pushReplacementNamed(context, LoginPage.routeName);
       }
       else
       {
         Navigator.pushReplacementNamed(context, HomePage.routeName);
+
       }
     });
 

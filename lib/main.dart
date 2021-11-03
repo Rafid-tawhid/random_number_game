@@ -15,6 +15,7 @@ import 'package:random_number_game/pages/fb_login_page.dart';
 import 'package:random_number_game/pages/login_page.dart';
 import 'package:random_number_game/pages/player_dashboard.dart';
 import 'package:random_number_game/pages/profile_page.dart';
+import 'package:random_number_game/pages/register_user.dart';
 import 'package:random_number_game/pages/splash_screen.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,6 +39,7 @@ void main() async {
       ProfilePage.routeName: (context) => ProfilePage(),
       HomePage.routeName: (context) => HomePage(),
       LoginPage.routeName: (context) => LoginPage(),
+      RegisterUser.routeName: (context) => RegisterUser(),
       FacebookLoginPage.routeName:(context) =>FacebookLoginPage(),
       Log.routeName:(context) =>Log(),
 
@@ -125,8 +127,10 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         actions: [
           IconButton(onPressed: (){
+            // print(FirebaseAuthService.current_user.toString());
             FirebaseAuthService.logoutUser();
             Navigator.pushReplacementNamed(context, SplashScreen.routeName);
+
           }, icon: Icon(Icons.logout))
         ],
       ),

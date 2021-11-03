@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:random_number_game/auth/firebase_auth.dart';
+import 'package:random_number_game/pages/register_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
@@ -15,12 +16,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+
   late String nameS,idS,emailS,errorMsg='';
   TextEditingController emailController = new TextEditingController();
   TextEditingController passController = new TextEditingController();
 
   late String email,pass;
-
 
   final _formKey=GlobalKey<FormState>();
   @override
@@ -96,8 +98,8 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(width: 5,),
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
-                          child: GestureDetector(child: Text("Register",style: TextStyle(color: Colors.deepOrange),),onTap: (){
-                            print("okkkk");
+                          child: GestureDetector(child: Text("Create",style: TextStyle(color: Colors.deepOrange),),onTap: (){
+                           Navigator.pushReplacementNamed(context, RegisterUser.routeName);
                           },),
                         )
                       ],
@@ -132,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                         setState(() {
                           email = emailController.text;
                           pass = passController.text;
-                          _loginUser(email,pass);
+                          loginUser(email,pass);
                         });
 
 
@@ -140,6 +142,9 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
                   ),
+
+
+
                 ],
               ),
             ),
@@ -161,11 +166,16 @@ class _LoginPageState extends State<LoginPage> {
     return nameS;
   }
 
-  void _loginUser (String email, String pass) async {
+  void loginUser (String email, String pass) async {
+
 
     try{
       final user=await FirebaseAuthService.loginUser(email, pass);
-      if(user!=null){Navigator.pushReplacementNamed(context, HomePage.routeName);}
+
+      if(user!=null){
+        Navigator.pushReplacementNamed(context, HomePage.routeName);
+        print("Hello : "+FirebaseAuthService.current_user!.uid);
+      }
     }
     on FirebaseAuthException catch (e){
       setState(() {
