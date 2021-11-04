@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   late String nameS,idS,emailS,errorMsg='';
   TextEditingController emailController = new TextEditingController();
   TextEditingController passController = new TextEditingController();
-
+  final db = FirebaseFirestore.instance;
   late String email,pass,emailFromLoginPage;
 
   final _formKey=GlobalKey<FormState>();
@@ -142,8 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                             pass = passController.text;
                             loginUser(email,pass);
                           });
-
-
+                          //go to home page with name from query
 
                         },
                       ),
@@ -151,8 +151,11 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
+
                   ],
                 ),
+
+
               ),
             ),
           ),
@@ -180,6 +183,8 @@ class _LoginPageState extends State<LoginPage> {
     }
 
   }
+
+
   // void saveDataToSharedPref(String email) async {
   //   var sharedPreferences = await SharedPreferences.getInstance();
   //   sharedPreferences.setString("emailFromLoginPage", email);

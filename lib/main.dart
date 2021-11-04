@@ -77,8 +77,10 @@ class _HomePageState extends State<HomePage> {
   bool showMsg = false;
   bool _highScoreMsg = false;
   String _title = 'Noob';
+  String currentUserName = 'NULLLL';
   var _achivement = 'Concurer';
   var _date;
+  final db = FirebaseFirestore.instance;
   DateTime now = DateTime.now();
   AudioPlayer player = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
 
@@ -165,7 +167,63 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+            Container(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: db.collection('players').where('mail',isEqualTo: FirebaseAuthService.current_user!.email).snapshots(),
 
+                builder: (context, snapshot) {
+
+                    return Container(
+                      // child: ListView(
+                      //   children: snapshot.data!.docs.map((doc) {
+                      //
+                      //     return ListTile(
+                      //       leading: Padding(
+                      //         padding: const EdgeInsets.all(3.0),
+                      //         child: CircleAvatar(
+                      //           backgroundColor: Colors.white,
+                      //           child: Icon(
+                      //             Icons.wine_bar_rounded,
+                      //             color: Colors.deepOrange,
+                      //             size: 30.0,
+                      //           ),
+                      //
+                      //         ),
+                      //       ),
+                      //       title: Text(
+                      //
+                      //         doc['name'],
+                      //         style: TextStyle(fontSize: 20),
+                      //       ),
+                      //       subtitle: Row(
+                      //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //         children: [
+                      //        Text(
+                      //             doc['title'],style: TextStyle(color: Colors.red),
+                      //           ),
+                      //           Text(
+                      //             doc['date'],style: TextStyle(color: Colors.blue),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //       trailing: Text(doc['score'].toString(),style: TextStyle(fontSize: 22),),
+                      //
+                      //     );
+                      //   }).toList(),
+                      // ),
+                      child: ListView.builder(itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context,index){
+
+                            QueryDocumentSnapshot user=snapshot.data!.docs[index];
+
+                            return Text('');
+                          }),
+                    );
+                },
+              ),
+
+            ),
+            
             SizedBox(
               height: 50,
             ),
@@ -406,6 +464,7 @@ class _HomePageState extends State<HomePage> {
 
   void _rollTheDice() {
 
+    // _fetchUserInfo();
 
     final player = AudioCache();
     // call this method when desired
@@ -643,6 +702,7 @@ class _HomePageState extends State<HomePage> {
 
 
      final docRef=FirebaseFirestore.instance.collection('players').doc();
+
     _userInfoModel.name=nameS;
     _userInfoModel.mail=FirebaseAuthService.current_user?.email;
     _userInfoModel.titel=_title;
@@ -670,6 +730,8 @@ class _HomePageState extends State<HomePage> {
     print("Get User Value from SF:" + nameS + idS + mailS);
     return emailFromLogin;
   }
+
+
 
   // void startTimer() {
   //   const oneSec = const Duration(seconds: 1);

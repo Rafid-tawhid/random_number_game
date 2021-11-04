@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
+import 'package:random_number_game/auth/firebase_auth.dart';
 import 'package:random_number_game/models/user_details.dart';
 import 'package:random_number_game/models/user_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,6 +22,7 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
   final db = FirebaseFirestore.instance;
   late String name,id,city;
   late String title;
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -131,6 +133,7 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
               );
           },
         ),
+        
       ),
     );
   }

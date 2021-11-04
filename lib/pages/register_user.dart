@@ -1,5 +1,6 @@
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:random_number_game/auth/firebase_auth.dart';
@@ -123,11 +124,30 @@ class _RegisterUserState extends State<RegisterUser> {
                         _formKey.currentState!.save();
                       }
 
-                      setState(() {
-                        email = emailController.text;
-                        pass = passController.text;
-                        name = nameController.text;
-                      });
+                      // setState(() {
+                      //   email = emailController.text;
+                      //   pass = passController.text;
+                      //   name = nameController.text;
+                      // });
+
+                      try{
+                       final user= await FirebaseAuthService.signUpUser(email, pass);
+                        saveDataToSharedPref(name, FirebaseAuthService.current_user!.uid, email);
+                        Navigator.pushReplacementNamed(context, HomePage.routeName);
+                        if(user!=null){
+                          Navigator.pushReplacementNamed(context, HomePage.routeName);
+                        }
+                      }
+                      on FirebaseAuthException catch (e){
+                        setState(() {
+                          errorMsg=e.message!;
+                        });
+                      }
+
+
+
+
+
                        await FirebaseAuthService.signUpUser(email, pass);
                        saveDataToSharedPref(name, FirebaseAuthService.current_user!.uid, email);
                        Navigator.pushReplacementNamed(context, HomePage.routeName);
@@ -135,11 +155,14 @@ class _RegisterUserState extends State<RegisterUser> {
                   ),
                 ),
 
+                Text('$errorMsg',style: TextStyle(color: Colors.red),),
+
 
               ],
             ),
           key: _formKey,
           ),
+
 
           ],
         ),
