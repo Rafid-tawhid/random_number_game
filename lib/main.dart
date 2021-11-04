@@ -59,7 +59,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   UserInfoModel _userInfoModel=UserInfoModel();
-
+  static FirebaseFirestore _db=FirebaseFirestore.instance;
   late Timer _timer;
   int _start = 120;
   var _score = 0;
@@ -75,14 +75,14 @@ class _HomePageState extends State<HomePage> {
   var c = 0;
   var d = 0;
   bool showMsg = false;
-
+  bool _highScoreMsg = false;
   String _title = 'Noob';
   var _achivement = 'Concurer';
   var _date;
   DateTime now = DateTime.now();
   AudioPlayer player = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
 
-  String nameS = "Bot User", idS = "00", mailS = "user@";
+  String nameS = "Bot User", idS = "00", mailS = "user@",emailFromLogin="email@from_user";
   List<int> list = [];
   final _random = Random.secure();
   final _diceList = <String>[
@@ -598,6 +598,7 @@ class _HomePageState extends State<HomePage> {
                     await fetchUsersDataFromSF();
                     _date =
                         "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
+                    print(emailFromLogin);
 
                   },
                 ),
@@ -654,7 +655,6 @@ class _HomePageState extends State<HomePage> {
     docRef.set(_userInfoModel.toMap());
 
 
-
   }
 
   Future<String> fetchUsersDataFromSF() async {
@@ -664,10 +664,11 @@ class _HomePageState extends State<HomePage> {
       nameS = prefs.getString("nm")!;
       idS = prefs.getString("id")!;
       mailS = prefs.getString("mail")!;
+      emailFromLogin = prefs.getString("emailFromLoginPage")!;
 
     });
     print("Get User Value from SF:" + nameS + idS + mailS);
-    return nameS;
+    return emailFromLogin;
   }
 
   // void startTimer() {

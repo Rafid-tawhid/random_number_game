@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = new TextEditingController();
   TextEditingController passController = new TextEditingController();
 
-  late String email,pass;
+  late String email,pass,emailFromLoginPage;
 
   final _formKey=GlobalKey<FormState>();
   @override
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.all(18.0),
                       child: Text(
-                        "Lets go..",
+                        "Free Free..",
                         style: TextStyle(
                             fontSize: 56, color: Colors.red, fontFamily: 'Cursive'),
                       ),
@@ -160,18 +160,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-  Future<String> fetchUsersDataFromSF() async {
-    final prefs = await SharedPreferences.getInstance();
 
-    setState(() {
-      nameS = prefs.getString("nm")!;
-      idS = prefs.getString("id")!;
-      emailS = prefs.getString("ct")!;
-
-    });
-    print("Get User Value from SF:" + nameS + idS + emailS);
-    return nameS;
-  }
 
   void loginUser (String email, String pass) async {
 
@@ -191,5 +180,11 @@ class _LoginPageState extends State<LoginPage> {
     }
 
   }
+  // void saveDataToSharedPref(String email) async {
+  //   var sharedPreferences = await SharedPreferences.getInstance();
+  //   sharedPreferences.setString("emailFromLoginPage", email);
+  //
+  // }
+
 
 }

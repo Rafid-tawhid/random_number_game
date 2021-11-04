@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:random_number_game/auth/firebase_auth.dart';
 
 
 class ContactPage extends StatefulWidget {
@@ -118,7 +121,11 @@ class _ContactPageState extends State<ContactPage> {
                       email = emailController.text;
                       phone = phoneController.text;
                       pass = passController.text;
-                      // print(name+email+phone+pass);
+                      final FirebaseFirestore db = FirebaseFirestore.instance;
+                       final ref = db.collection('players').doc();
+                       var membersIDS=FirebaseAuthService.current_user!.uid;
+
+
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30)),

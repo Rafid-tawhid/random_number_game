@@ -151,6 +151,6 @@ class _RegisterUserState extends State<RegisterUser> {
     sharedPreferences.setString("nm", name);
     sharedPreferences.setString("id", userId);
     sharedPreferences.setString("mail", email);
-    print("saved user value to SF");
+    print("saved user value to SF from Register Page");
   }
 }

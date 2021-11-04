@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:random_number_game/auth/firebase_auth.dart';
+import 'package:random_number_game/pages/login_page.dart';
 import '../main.dart';
 import 'louncher_page.dart';
 

@@ -130,26 +130,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               city = emailController.text;
 
                             });
-                            saveDataToSharedPref(name, userId, city);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MaterialApp(
-                                        debugShowCheckedModeBanner: false,
-                                        home: Scaffold(
-                                          drawer: Drawer(
-                                            child: CustomDrawer(),
-                                          ),
-                                          appBar: AppBar(
-                                            title: const Text(
-                                              "G-Game",
-                                            ),
-                                            centerTitle: true,
-                                          ),
-                                          body: HomePage(),
-                                        ),
-                                      )),
-                            );
+                            // saveDataToSharedPref(name, userId, city);
+                            Navigator.pushNamed(context, HomePage.routeName);
                           },
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(80.0)),
@@ -298,13 +280,13 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void saveDataToSharedPref(String name, String userId, String email) async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("nm", name);
-    sharedPreferences.setString("id", userId);
-    sharedPreferences.setString("ct", email);
-    print("saved user value to SF");
-  }
+  // void saveDataToSharedPref(String name, String userId, String email) async {
+  //   var sharedPreferences = await SharedPreferences.getInstance();
+  //   sharedPreferences.setString("nm", name);
+  //   sharedPreferences.setString("id", userId);
+  //   sharedPreferences.setString("ct", email);
+  //   print("saved user value to SF");
+  // }
 
 
 }

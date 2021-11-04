@@ -14,15 +14,15 @@ class UserInfoModel{
 
 
   UserInfoModel(
-      {this.id,
-      this.name,
-      this.score,
-      this.higest,
-      this.titel,
-      this.mail,
-      this.achievement,
-      this.date,
-      this.dates});
+      {this.id="NULL",
+      this.name='NULL',
+      this.score=null,
+      this.higest=null,
+      this.titel="NULL",
+      this.mail="NULL",
+      this.achievement="NULL",
+      this.date="NULL",
+      this.dates=null});
 
   Map<String,dynamic> toMap(){
     var map=<String,dynamic>{
