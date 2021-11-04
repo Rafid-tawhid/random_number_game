@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:random_number_game/auth/firebase_auth.dart';
 import 'package:random_number_game/main.dart';
+import 'package:random_number_game/pages/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterUser extends StatefulWidget {
   static const String routeName='/register_page';
@@ -27,6 +29,11 @@ class _RegisterUserState extends State<RegisterUser> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar: AppBar(title: Text("Registration"),centerTitle: true,
+        leading: IconButton(onPressed: (){
+          Navigator.pushNamed(context, LoginPage.routeName);
+        }, icon: Icon(Icons.arrow_back),),),
+
         body: ListView(
 
           children: [
@@ -122,6 +129,7 @@ class _RegisterUserState extends State<RegisterUser> {
                         name = nameController.text;
                       });
                        await FirebaseAuthService.signUpUser(email, pass);
+                       saveDataToSharedPref(name, FirebaseAuthService.current_user!.uid, email);
                        Navigator.pushReplacementNamed(context, HomePage.routeName);
                     },
                   ),
@@ -137,5 +145,12 @@ class _RegisterUserState extends State<RegisterUser> {
         ),
       )
     );
+  }
+  void saveDataToSharedPref(String name, String userId, String email) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("nm", name);
+    sharedPreferences.setString("id", userId);
+    sharedPreferences.setString("mail", email);
+    print("saved user value to SF");
   }
 }
