@@ -59,7 +59,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   UserInfoModel _userInfoModel=UserInfoModel();
-
+  static FirebaseFirestore _db=FirebaseFirestore.instance;
   late Timer _timer;
   int _start = 120;
   var _score = 0;
@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
   var c = 0;
   var d = 0;
   bool showMsg = false;
-
+  bool _highScoreMsg = false;
   String _title = 'Noob';
   var _achivement = 'Concurer';
   var _date;
@@ -652,7 +652,6 @@ class _HomePageState extends State<HomePage> {
     _userInfoModel.id=docRef.id;
     // FirebaseFirestore.instance.collection('players').add(_userInfoModel.toMap());
     docRef.set(_userInfoModel.toMap());
-
 
 
   }

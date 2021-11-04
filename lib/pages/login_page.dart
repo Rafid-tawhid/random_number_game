@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.all(18.0),
                       child: Text(
-                        "Lets go..",
+                        "Free Free..",
                         style: TextStyle(
                             fontSize: 56, color: Colors.red, fontFamily: 'Cursive'),
                       ),
