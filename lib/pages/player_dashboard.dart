@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
+import 'package:random_number_game/models/user_details.dart';
+import 'package:random_number_game/models/user_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PlayerDashboard extends StatefulWidget {
@@ -39,7 +41,7 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(color: Colors.blueAccent,),
               );
             } else
               return Container(
@@ -51,43 +53,81 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                child: ListView(
-                  children: snapshot.data!.docs.map((doc) {
-                    
-                    return ListTile(
-                      leading: Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.wine_bar_rounded,
-                            color: Colors.deepOrange,
-                            size: 30.0,
-                          ),
+                // child: ListView(
+                //   children: snapshot.data!.docs.map((doc) {
+                //
+                //     return ListTile(
+                //       leading: Padding(
+                //         padding: const EdgeInsets.all(3.0),
+                //         child: CircleAvatar(
+                //           backgroundColor: Colors.white,
+                //           child: Icon(
+                //             Icons.wine_bar_rounded,
+                //             color: Colors.deepOrange,
+                //             size: 30.0,
+                //           ),
+                //
+                //         ),
+                //       ),
+                //       title: Text(
+                //
+                //         doc['name'],
+                //         style: TextStyle(fontSize: 20),
+                //       ),
+                //       subtitle: Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //         children: [
+                //        Text(
+                //             doc['title'],style: TextStyle(color: Colors.red),
+                //           ),
+                //           Text(
+                //             doc['date'],style: TextStyle(color: Colors.blue),
+                //           ),
+                //         ],
+                //       ),
+                //       trailing: Text(doc['score'].toString(),style: TextStyle(fontSize: 22),),
+                //
+                //     );
+                //   }).toList(),
+                // ),
+                child: ListView.builder(itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context,index){
 
+                  QueryDocumentSnapshot user=snapshot.data!.docs[index];
+
+                  return ListTile(
+                    leading: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.wine_bar_rounded,
+                          color: Colors.deepOrange,
+                          size: 30.0,
                         ),
-                      ),
-                      title: Text(
 
-                        doc['name'],
-                        style: TextStyle(fontSize: 20),
                       ),
-                      subtitle: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                       Text(
-                            doc['title'],style: TextStyle(color: Colors.red),
-                          ),
-                          Text(
-                            doc['date'],style: TextStyle(color: Colors.blue),
-                          ),
-                        ],
-                      ),
-                      trailing: Text(doc['score'].toString(),style: TextStyle(fontSize: 22),),
+                    ),
+                    title: Text(
 
-                    );
-                  }).toList(),
-                ),
+                      user['name'],
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    subtitle: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          user['titel'],style: TextStyle(color: Colors.red),
+                        ),
+                        Text(
+                          user['date'],style: TextStyle(color: Colors.blue),
+                        ),
+                      ],
+                    ),
+                    trailing: Text(user['score'].toString(),style: TextStyle(fontSize: 22),),
+
+                  );;
+                }),
               );
           },
         ),

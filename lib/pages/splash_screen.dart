@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:random_number_game/auth/firebase_auth.dart';
-import 'package:random_number_game/pages/login_page.dart';
-
-import 'package:random_number_game/pages/profile_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'contact_page.dart';
-
-import '../custom_widget/custom_drawer.dart';
 import '../main.dart';
+import 'louncher_page.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String routeName='/splash_screen';
@@ -21,21 +14,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
 
-
-  late String nameS,idS,emailS;
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController idController = new TextEditingController();
-  TextEditingController emailController = new TextEditingController();
-  late String userId,name,email;
-
-
   @override
   void initState() {
 
     Future.delayed(Duration.zero,(){
 
       if(FirebaseAuthService.current_user==null){
-        Navigator.pushReplacementNamed(context, LoginPage.routeName);
+        Navigator.pushReplacementNamed(context, LauncherPage.routeName);
       }
       else
       {

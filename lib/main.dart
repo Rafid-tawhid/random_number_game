@@ -4,24 +4,26 @@ import 'dart:math';
 import 'dart:ui';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:random_number_game/auth/firebase_auth.dart';
+import 'package:random_number_game/models/players_models.dart';
 import 'package:random_number_game/pages/log.dart';
 import 'package:random_number_game/pages/fb_login_page.dart';
 import 'package:random_number_game/pages/login_page.dart';
+import 'package:random_number_game/pages/louncher_page.dart';
 import 'package:random_number_game/pages/player_dashboard.dart';
 import 'package:random_number_game/pages/profile_page.dart';
 import 'package:random_number_game/pages/register_user.dart';
 import 'package:random_number_game/pages/splash_screen.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'custom_widget/custom_drawer.dart';
-import 'custom_widget/custom_text.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +37,7 @@ void main() async {
     initialRoute: SplashScreen.routeName,
     routes: {
       SplashScreen.routeName: (context) => SplashScreen(),
+      LauncherPage.routeName: (context) => LauncherPage(),
       PlayerDashboard.routeName: (context) => PlayerDashboard(),
       ProfilePage.routeName: (context) => ProfilePage(),
       HomePage.routeName: (context) => HomePage(),
@@ -54,6 +57,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  UserInfoModel _userInfoModel=UserInfoModel();
+
   late Timer _timer;
   int _start = 120;
   var _score = 0;
@@ -69,14 +75,14 @@ class _HomePageState extends State<HomePage> {
   var c = 0;
   var d = 0;
   bool showMsg = false;
-  bool _highScoreMsg = false;
+
   String _title = 'Noob';
   var _achivement = 'Concurer';
   var _date;
   DateTime now = DateTime.now();
   AudioPlayer player = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
 
-  String nameS = "Bot User", idS = "10", cityS = "Dhaka";
+  String nameS = "Bot User", idS = "00", mailS = "user@";
   List<int> list = [];
   final _random = Random.secure();
   final _diceList = <String>[
@@ -567,16 +573,13 @@ class _HomePageState extends State<HomePage> {
                         "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
 
                     await fetchUsersDataFromSF();
-
-                    _storeDatatoFirebase(idS, nameS, _score, _date,
-                        _higestScore, _title, cityS, _achivement);
-
+                    _storeDatatoFirebase();
                     fToast.removeCustomToast();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => SplashScreen()));
-                    // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (BuildContext context) => SplashScreen()));
+
                   },
                 ),
                 SizedBox(
@@ -595,8 +598,7 @@ class _HomePageState extends State<HomePage> {
                     await fetchUsersDataFromSF();
                     _date =
                         "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
-                    _storeDatatoFirebase(idS, nameS, _score, _date,
-                        _higestScore, _title, cityS, _achivement);
+
                   },
                 ),
               ],
@@ -636,20 +638,23 @@ class _HomePageState extends State<HomePage> {
     _higestScore = value;
   }
 
-  void _storeDatatoFirebase(
-      id, name, int score, date, int higestScore, title, city, achivement) {
+  void _storeDatatoFirebase() {
 
-    Map<String, dynamic> data = {
-      "id": id,
-      "name": name,
-      "title": title,
-      "city": city,
-      "score": score,
-      "higest": higestScore,
-      "date": date,
-      "achivement": achivement
-    };
-    FirebaseFirestore.instance.collection("players").add(data);
+
+     final docRef=FirebaseFirestore.instance.collection('players').doc();
+    _userInfoModel.name=nameS;
+    _userInfoModel.mail=FirebaseAuthService.current_user?.email;
+    _userInfoModel.titel=_title;
+    _userInfoModel.achievement=_achivement;
+    _userInfoModel.higest=_higestScore;
+    _userInfoModel.date=_date;
+    _userInfoModel.score=_score;
+    _userInfoModel.id=docRef.id;
+    // FirebaseFirestore.instance.collection('players').add(_userInfoModel.toMap());
+    docRef.set(_userInfoModel.toMap());
+
+
+
   }
 
   Future<String> fetchUsersDataFromSF() async {
@@ -658,10 +663,10 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       nameS = prefs.getString("nm")!;
       idS = prefs.getString("id")!;
-      cityS = prefs.getString("ct")!;
+      mailS = prefs.getString("mail")!;
 
     });
-    print("Get User Value from SF:" + nameS + idS + cityS);
+    print("Get User Value from SF:" + nameS + idS + mailS);
     return nameS;
   }
 

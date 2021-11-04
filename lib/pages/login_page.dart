@@ -27,125 +27,132 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey=GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SafeArea(
-        child: Scaffold(
-          body: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset('img/anim5.gif'),
-                  Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: Text(
-                      "Lets go..",
-                      style: TextStyle(
-                          fontSize: 56, color: Colors.red, fontFamily: 'Cursive'),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(title: Text("Login"),centerTitle: true,
+          leading: IconButton(onPressed: (){
+            Navigator.pop(context);
+          }, icon: Icon(Icons.arrow_back),),),
+        body: SafeArea(
+          child: Scaffold(
+            body: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('img/anim5.gif'),
+                    Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Text(
+                        "Lets go..",
+                        style: TextStyle(
+                            fontSize: 56, color: Colors.red, fontFamily: 'Cursive'),
+                      ),
                     ),
-                  ),
-                  Form(
-                    key: _formKey,
-                      child:Column(
-                    children: [
-
-                      Padding(
-
-                        padding: const EdgeInsets.only(left: 20.0,right: 20,bottom: 10),
-                        child: TextFormField(
-                          validator: (value){
-                            if(value==null||value.isEmpty ){
-                              return 'This Field is required';
-                            }
-                            return null;
-                          },
-                          controller: emailController,
-                          textAlign: TextAlign.left,
-
-                          decoration: InputDecoration(
-                            // border: InputBorder.none,
-                            label: Text('YOUR EMAIL'),
-                            border: OutlineInputBorder(),
-                            hintStyle: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0,right: 20,bottom: 10),
-                        child: TextFormField(
-                          controller: passController,
-                          textAlign: TextAlign.left,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            // border: InputBorder.none,
-                            label: Text('Password'),
-
-                            border: OutlineInputBorder(),
-                            hintStyle: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      ),
-
-                    ],
-                  )),
-
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                    Form(
+                      key: _formKey,
+                        child:Column(
                       children: [
-                        Text("don't have an account ?"),
-                        SizedBox(width: 5,),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: GestureDetector(child: Text("Create",style: TextStyle(color: Colors.deepOrange),),onTap: (){
-                           Navigator.pushReplacementNamed(context, RegisterUser.routeName);
-                          },),
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(errorMsg,style: TextStyle(color: Colors.red),),
-                  ),
 
-                  Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: FlatButton(
-                      color: Colors.red,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 28.0, right: 28),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: new Text(
-                            ' Play ',
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                        Padding(
+
+                          padding: const EdgeInsets.only(left: 20.0,right: 20,bottom: 10),
+                          child: TextFormField(
+                            validator: (value){
+                              if(value==null||value.isEmpty ){
+                                return 'This Field is required';
+                              }
+                              return null;
+                            },
+                            controller: emailController,
+                            textAlign: TextAlign.left,
+
+                            decoration: InputDecoration(
+                              // border: InputBorder.none,
+                              label: Text('YOUR EMAIL'),
+                              border: OutlineInputBorder(),
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ),
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20.0,right: 20,bottom: 10),
+                          child: TextFormField(
+                            controller: passController,
+                            textAlign: TextAlign.left,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              // border: InputBorder.none,
+                              label: Text('Password'),
+
+                              border: OutlineInputBorder(),
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    )),
+
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text("don't have an account ?"),
+                          SizedBox(width: 5,),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: GestureDetector(child: Text("Create",style: TextStyle(color: Colors.deepOrange),),onTap: (){
+                             Navigator.pushReplacementNamed(context, RegisterUser.routeName);
+                            },),
+                          )
+                        ],
                       ),
-                      onPressed: () {
-                        if(_formKey.currentState!.validate()){
-                          _formKey.currentState!.save();
-                        }
-
-                        setState(() {
-                          email = emailController.text;
-                          pass = passController.text;
-                          loginUser(email,pass);
-                        });
-
-
-
-                      },
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(errorMsg,style: TextStyle(color: Colors.red),),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: FlatButton(
+                        color: Colors.red,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 28.0, right: 28),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: new Text(
+                              ' Play ',
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          if(_formKey.currentState!.validate()){
+                            _formKey.currentState!.save();
+                          }
+
+                          setState(() {
+                            email = emailController.text;
+                            pass = passController.text;
+                            loginUser(email,pass);
+                          });
 
 
 
-                ],
+                        },
+                      ),
+                    ),
+
+
+
+                  ],
+                ),
               ),
             ),
           ),
