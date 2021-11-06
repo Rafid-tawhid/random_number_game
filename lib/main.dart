@@ -71,6 +71,8 @@ class _HomePageState extends State<HomePage> {
   var b = 0;
   var c = 0;
   var d = 0;
+  // late int SCORE;
+  // late String BOT;
   bool showMsg = false;
   bool _highScoreMsg = false;
   String _title = 'Noob';
@@ -78,6 +80,7 @@ class _HomePageState extends State<HomePage> {
   var _achivement = 'Concurer';
   var _date;
   final db = FirebaseFirestore.instance;
+
   DateTime now = DateTime.now();
   AudioPlayer player = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
 
@@ -121,7 +124,7 @@ class _HomePageState extends State<HomePage> {
     //initial call
     _rollTheDice();
 
-    _readHigestScore();
+    // _readHigestScore();
 
     return Scaffold(
       drawer: Drawer(
@@ -145,7 +148,7 @@ class _HomePageState extends State<HomePage> {
       body: StreamBuilder<QuerySnapshot>(
           stream: db
               .collection('players')
-              .where('mail', isEqualTo: FirebaseAuthService.current_user!.email)
+              .where('mail', isEqualTo: FirebaseAuthService.current_user!.email,)
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -162,16 +165,31 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       QueryDocumentSnapshot user = snapshot.data!.docs[index];
 
+                      // if(user['name']==null||user['score']==null){
+                      //
+                      //     BOT='BOT';
+                      //     SCORE=_higestScore;
+                      //
+                      // }
+                      // else
+                      //   {
+                      //
+                      //       BOT=user['name'];
+                      //       SCORE=user['higest'];
+                      //       print("HELLLO :"+BOT+SCORE.toString());
+                      //
+                      //   }
+
                       return Column(
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(left: 12.0, right: 12),
+                            const EdgeInsets.only(left: 12.0, right: 12),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Higest Score :'+user['higest'].toString(),
+                                  'Higest Score :$_higestScore',
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -273,7 +291,7 @@ class _HomePageState extends State<HomePage> {
                                       },
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(80.0)),
+                                          BorderRadius.circular(80.0)),
                                       padding: EdgeInsets.all(0.0),
                                       child: Ink(
                                         decoration: BoxDecoration(
@@ -286,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                                               end: Alignment.centerRight,
                                             ),
                                             borderRadius:
-                                                BorderRadius.circular(30.0)),
+                                            BorderRadius.circular(30.0)),
                                         child: Container(
                                           constraints: const BoxConstraints(
                                               maxWidth: 250.0, minHeight: 50.0),
@@ -315,7 +333,7 @@ class _HomePageState extends State<HomePage> {
                                       },
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(80.0)),
+                                          BorderRadius.circular(80.0)),
                                       padding: EdgeInsets.all(0.0),
                                       child: Ink(
                                         decoration: BoxDecoration(
@@ -328,7 +346,7 @@ class _HomePageState extends State<HomePage> {
                                               end: Alignment.centerRight,
                                             ),
                                             borderRadius:
-                                                BorderRadius.circular(30.0)),
+                                            BorderRadius.circular(30.0)),
                                         child: Container(
                                           constraints: const BoxConstraints(
                                               maxWidth: 250.0, minHeight: 50.0),
@@ -363,7 +381,7 @@ class _HomePageState extends State<HomePage> {
                                       },
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(80.0)),
+                                          BorderRadius.circular(80.0)),
                                       padding: EdgeInsets.all(0.0),
                                       child: Ink(
                                         decoration: BoxDecoration(
@@ -376,7 +394,7 @@ class _HomePageState extends State<HomePage> {
                                               end: Alignment.centerRight,
                                             ),
                                             borderRadius:
-                                                BorderRadius.circular(30.0)),
+                                            BorderRadius.circular(30.0)),
                                         child: Container(
                                           constraints: const BoxConstraints(
                                               maxWidth: 250.0, minHeight: 50.0),
@@ -405,7 +423,7 @@ class _HomePageState extends State<HomePage> {
                                       },
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(80.0)),
+                                          BorderRadius.circular(80.0)),
                                       padding: EdgeInsets.all(0.0),
                                       child: Ink(
                                         decoration: BoxDecoration(
@@ -418,7 +436,7 @@ class _HomePageState extends State<HomePage> {
                                               end: Alignment.centerRight,
                                             ),
                                             borderRadius:
-                                                BorderRadius.circular(30.0)),
+                                            BorderRadius.circular(30.0)),
                                         child: Container(
                                           constraints: BoxConstraints(
                                               maxWidth: 250.0, minHeight: 50.0),
@@ -478,6 +496,7 @@ class _HomePageState extends State<HomePage> {
       _rand3 = _random.nextInt(24);
 
       _sum = _index1 + _index2 + 2;
+
       // _score =_score +_index1 + _index2 + 2;
 
       suffle(_rand1, _rand2, _rand3, _sum);
@@ -569,9 +588,9 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Center(
                     child: Text(
-                  "Wrong Answer",
-                  style: TextStyle(fontSize: 24, color: Colors.white),
-                )),
+                      "Wrong Answer",
+                      style: TextStyle(fontSize: 24, color: Colors.white),
+                    )),
               ],
             ),
           ),
@@ -608,11 +627,10 @@ class _HomePageState extends State<HomePage> {
                     'Exit',
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () async {
+                  onPressed: () {
                     _date =
-                        "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
+                    "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
 
-                    await fetchUsersDataFromSF();
                     _storeDatatoFirebase();
                     fToast.removeCustomToast();
                     // Navigator.push(
@@ -632,11 +650,10 @@ class _HomePageState extends State<HomePage> {
                     'Play',
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () async {
+                  onPressed: () {
                     customToastShow();
-                    await fetchUsersDataFromSF();
                     _date =
-                        "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
+                    "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
                     print(emailFromLogin);
                   },
                 ),
@@ -692,36 +709,36 @@ class _HomePageState extends State<HomePage> {
     docRef.set(_userInfoModel.toMap());
   }
 
-  Future<String> fetchUsersDataFromSF() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    setState(() {
-      nameS = prefs.getString("nm")!;
-      idS = prefs.getString("id")!;
-      mailS = prefs.getString("mail")!;
-      emailFromLogin = prefs.getString("emailFromLoginPage")!;
-    });
-    print("Get User Value from SF:" + nameS + idS + mailS);
-    return emailFromLogin;
-  }
-
-  // void startTimer() {
-  //   const oneSec = const Duration(seconds: 1);
-  //       _timer = new Timer.periodic(
-  //         oneSec,
-  //             (Timer timer) {
-  //           if (_start == 0) {
-  //             setState(() {
-  //               timer.cancel();
-  //             });
-  //           } else {
-  //             setState(() {
-  //               _start--;
-  //             });
-  //           }
-  //         },
-  //       );
+  // Future<String> fetchUsersDataFromSF() async {
+  //   final prefs = await SharedPreferences.getInstance();
   //
+  //   setState(() {
+  //     nameS = prefs.getString("nm")!;
+  //     idS = prefs.getString("id")!;
+  //     mailS = prefs.getString("mail")!;
+  //     emailFromLogin = prefs.getString("emailFromLoginPage")!;
+  //   });
+  //   print("Get User Value from SF:" + nameS + idS + mailS);
+  //   return emailFromLogin;
   // }
+
+// void startTimer() {
+//   const oneSec = const Duration(seconds: 1);
+//       _timer = new Timer.periodic(
+//         oneSec,
+//             (Timer timer) {
+//           if (_start == 0) {
+//             setState(() {
+//               timer.cancel();
+//             });
+//           } else {
+//             setState(() {
+//               _start--;
+//             });
+//           }
+//         },
+//       );
+//
+// }
 
 }

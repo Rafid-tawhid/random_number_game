@@ -185,11 +185,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 
-  // void saveDataToSharedPref(String email) async {
-  //   var sharedPreferences = await SharedPreferences.getInstance();
-  //   sharedPreferences.setString("emailFromLoginPage", email);
-  //
-  // }
+  void saveDataToSharedPref(String email) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("emailFromLoginPage", email);
+
+  }
 
 
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:random_number_game/main.dart';
@@ -56,6 +57,7 @@ class _LauncherPageState extends State<LauncherPage> {
                     ),
                   ),
                   onPressed: () {
+
                     Navigator.pushNamed(context, HomePage.routeName);
                   },
                 ),
@@ -66,4 +68,5 @@ class _LauncherPageState extends State<LauncherPage> {
       ),
     );
   }
+
 }

@@ -124,11 +124,11 @@ class _RegisterUserState extends State<RegisterUser> {
                         _formKey.currentState!.save();
                       }
 
-                      // setState(() {
-                      //   email = emailController.text;
-                      //   pass = passController.text;
-                      //   name = nameController.text;
-                      // });
+                      setState(() {
+                        email = emailController.text;
+                        pass = passController.text;
+                        name = nameController.text;
+                      });
 
                       try{
                        final user= await FirebaseAuthService.signUpUser(email, pass);
@@ -144,12 +144,6 @@ class _RegisterUserState extends State<RegisterUser> {
                         });
                       }
 
-
-
-
-
-                       await FirebaseAuthService.signUpUser(email, pass);
-                       saveDataToSharedPref(name, FirebaseAuthService.current_user!.uid, email);
                        Navigator.pushReplacementNamed(context, HomePage.routeName);
                     },
                   ),
