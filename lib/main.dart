@@ -161,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       QueryDocumentSnapshot user = snapshot.data!.docs[index];
-
+                      _higestScore=user['higest'];
                       return Column(
                         children: [
                           Padding(
@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Higest Score :'+user['higest'].toString(),
+                                  'Higest Score :'+_higestScore.toString(),
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -478,6 +478,7 @@ class _HomePageState extends State<HomePage> {
       _rand3 = _random.nextInt(24);
 
       _sum = _index1 + _index2 + 2;
+
       // _score =_score +_index1 + _index2 + 2;
 
       suffle(_rand1, _rand2, _rand3, _sum);
