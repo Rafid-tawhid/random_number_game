@@ -6,6 +6,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 class Log extends StatefulWidget {
 
   static const String routeName='/log';
+
   @override
   _LogState createState() => _LogState();
 }
@@ -19,6 +20,7 @@ class _LogState extends State<Log> {
           child: Text("Log"),
           onPressed: (){
             signInWithFacebook();
+
 //             final AccessToken? accessToken = await FacebookAuth.instance.accessToken;
 //
 //             print("hi hello");

@@ -12,6 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:random_number_game/auth/firebase_auth.dart';
 import 'package:random_number_game/models/players_models.dart';
+import 'package:random_number_game/pages/demo_page.dart';
 import 'package:random_number_game/pages/log.dart';
 import 'package:random_number_game/pages/fb_login_page.dart';
 import 'package:random_number_game/pages/login_page.dart';
@@ -40,6 +41,7 @@ void main() async {
       PlayerDashboard.routeName: (context) => PlayerDashboard(),
       ProfilePage.routeName: (context) => ProfilePage(),
       HomePage.routeName: (context) => HomePage(),
+      DemoPage.routeName: (context) => DemoPage(),
       LoginPage.routeName: (context) => LoginPage(),
       RegisterUser.routeName: (context) => RegisterUser(),
       FacebookLoginPage.routeName: (context) => FacebookLoginPage(),
@@ -57,7 +59,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   UserInfoModel _userInfoModel = UserInfoModel();
   static FirebaseFirestore _db = FirebaseFirestore.instance;
-  late Timer _timer;
+
+  // late Timer _timer;
   int _start = 120;
   var _score = 0;
   var _higestScore = 0;
@@ -71,12 +74,10 @@ class _HomePageState extends State<HomePage> {
   var b = 0;
   var c = 0;
   var d = 0;
-  // late int SCORE;
-  // late String BOT;
+  late QueryDocumentSnapshot user;
   bool showMsg = false;
   bool _highScoreMsg = false;
   String _title = 'Noob';
-  String currentUserName = 'NULLLL';
   var _achivement = 'Concurer';
   var _date;
   final db = FirebaseFirestore.instance;
@@ -107,14 +108,16 @@ class _HomePageState extends State<HomePage> {
   late FToast fToast;
   @override
   void dispose() {
-    _timer.cancel();
-
+    // _timer.cancel();
     super.dispose();
   }
+
 
   @override
   void initState() {
     super.initState();
+
+
     fToast = FToast();
     fToast.init(context);
   }
@@ -147,7 +150,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: StreamBuilder<QuerySnapshot>(
           stream: db
-              .collection('players')
+              .collection('players').limit(1)
               .where('mail', isEqualTo: FirebaseAuthService.current_user!.email,)
               .snapshots(),
           builder: (context, snapshot) {
@@ -163,8 +166,8 @@ class _HomePageState extends State<HomePage> {
                     itemCount: snapshot.data!.docs.length,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      QueryDocumentSnapshot user = snapshot.data!.docs[index];
-
+                      user = snapshot.data!.docs[index];
+                      //
                       // if(user['name']==null||user['score']==null){
                       //
                       //     BOT='BOT';
@@ -196,6 +199,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Text(
                                   user['name'],
+
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -486,7 +490,7 @@ class _HomePageState extends State<HomePage> {
         _title = 'legend';
       }
     }
-    _saveLastScore(_higestScore);
+
 
     setState(() {
       _index1 = _random.nextInt(9);
@@ -531,13 +535,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   checkRes(int a) {
+
     // print(a);
     int aa = a;
     if (aa == _sum) {
       // _rollTheDice();
       setState(() {
         showMsg = true;
-        Future.delayed(const Duration(milliseconds: 800), () {
+        Future.delayed(const Duration(milliseconds: 500), () {
           setState(() {
             showMsg = false;
           });
@@ -546,6 +551,7 @@ class _HomePageState extends State<HomePage> {
       _score++;
     } else {
       print("ERROR");
+
       showToast();
     }
   }
@@ -628,15 +634,16 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
+
                     _date =
                     "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
 
                     _storeDatatoFirebase();
                     fToast.removeCustomToast();
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (BuildContext context) => SplashScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => SplashScreen()));
                   },
                 ),
                 SizedBox(
@@ -655,6 +662,8 @@ class _HomePageState extends State<HomePage> {
                     _date =
                     "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
                     print(emailFromLogin);
+
+
                   },
                 ),
               ],
@@ -680,24 +689,12 @@ class _HomePageState extends State<HomePage> {
     // _rollTheDice();
   }
 
-  void _saveLastScore(int score) async {
-    final prefs = await SharedPreferences.getInstance();
-    final key = 'my_int_key';
-    final value = score;
-    prefs.setInt(key, value);
-  }
 
-  _readHigestScore() async {
-    final prefs = await SharedPreferences.getInstance();
-    final key = 'my_int_key';
-    final value = prefs.getInt(key) ?? 0;
-    _higestScore = value;
-  }
 
   void _storeDatatoFirebase() {
     final docRef = FirebaseFirestore.instance.collection('players').doc();
 
-    _userInfoModel.name = nameS;
+    _userInfoModel.name = user['name'];
     _userInfoModel.mail = FirebaseAuthService.current_user?.email;
     _userInfoModel.titel = _title;
     _userInfoModel.achievement = _achivement;
@@ -740,5 +737,6 @@ class _HomePageState extends State<HomePage> {
 //       );
 //
 // }
+
 
 }

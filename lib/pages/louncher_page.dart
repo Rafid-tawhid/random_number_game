@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:random_number_game/main.dart';
+import 'package:random_number_game/pages/demo_page.dart';
 import 'package:random_number_game/pages/login_page.dart';
 
 class LauncherPage extends StatefulWidget {
@@ -58,7 +59,7 @@ class _LauncherPageState extends State<LauncherPage> {
                   ),
                   onPressed: () {
 
-                    Navigator.pushNamed(context, HomePage.routeName);
+                    Navigator.pushNamed(context, DemoPage.routeName);
                   },
                 ),
               ),
