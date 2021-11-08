@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:random_number_game/main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import '../custom_widget/custom_drawer.dart';
 import '../custom_widget/google_login_controller.dart';
 import 'log.dart';

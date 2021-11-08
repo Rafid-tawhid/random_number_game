@@ -13,8 +13,6 @@ import 'package:random_number_game/custom_widget/custom_drawer.dart';
 import 'package:random_number_game/models/players_models.dart';
 import 'package:random_number_game/pages/splash_screen.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
 
 class DemoPage extends StatefulWidget {
   static const String routeName = '/demo';
@@ -112,288 +110,325 @@ class _DemoPageState extends State<DemoPage> {
               icon: Icon(Icons.logout))
         ],
       ),
-      body: Column(
-                children: [
-                  Padding(
-                    padding:
-                    const EdgeInsets.only(left: 12.0, right: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Higest Score :$_higestScore',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                        Text(
-                          // user['name'],
-                          'hello',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+      body: StreamBuilder<QuerySnapshot>(
+          stream: db
+              .collection('players').limit(1)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: Colors.blueAccent,
+                ),
+              );
+            } else
+              return SingleChildScrollView(
+                child: ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                     QueryDocumentSnapshot user = snapshot.data!.docs[index];
+                      //
+                      // if(user['name']==null||user['score']==null){
+                      //
+                      //     BOT='BOT';
+                      //     SCORE=_higestScore;
+                      //
+                      // }
+                      // else
+                      //   {
+                      //
+                      //       BOT=user['name'];
+                      //       SCORE=user['higest'];
+                      //       print("HELLLO :"+BOT+SCORE.toString());
+                      //
+                      //   }
 
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Container(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Score :$_score',
-                          style: TextStyle(fontSize: 24),
-                        ),
-                        SizedBox(
-                          height: 50,
-                        ),
-                        if (showMsg == true)
-                          Center(
-                            child: Image.asset(
-                              'img/anim2.gif',
-                              height: 150,
-                              width: 200,
-                            ),
-                          )
-                        // showCongoMsg()
-                        else
-                          Center(
-                            child: Image.asset(
-                              'img/anim3.gif',
-                              height: 150,
-                              width: 200,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
+                      return Column(
+                        children: [
+                          Padding(
+                            padding:
+                            const EdgeInsets.only(left: 12.0, right: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Higest Score :$_higestScore',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                Text(
+                                  "user['name']",
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(15),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                _diceList[_index1],
-                                height: 70,
-                                width: 70,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                'img/plus.JPG',
-                                height: 60,
-                                width: 60,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                _diceList[_index2],
-                                height: 70,
-                                width: 70,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  // Text('sum :$_sum',style: TextStyle(fontSize: 20),),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            height: 35.0,
-                            child: RaisedButton(
-                              onPressed: () {
-                                checkRes(a);
-                              },
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(80.0)),
-                              padding: EdgeInsets.all(0.0),
-                              child: Ink(
-                                decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        Color(0xff374ABE),
-                                        Color(0xff64B6FF)
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                    borderRadius:
-                                    BorderRadius.circular(30.0)),
-                                child: Container(
-                                  constraints: const BoxConstraints(
-                                      maxWidth: 250.0, minHeight: 50.0),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "$a",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15),
+                                  style: TextStyle(
+                                    fontSize: 18,
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 35.0,
-                            child: RaisedButton(
-                              onPressed: () {
-                                checkRes(b);
-                              },
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(80.0)),
-                              padding: EdgeInsets.all(0.0),
-                              child: Ink(
-                                decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        Color(0xff374ABE),
-                                        Color(0xff64B6FF)
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                    borderRadius:
-                                    BorderRadius.circular(30.0)),
-                                child: Container(
-                                  constraints: const BoxConstraints(
-                                      maxWidth: 250.0, minHeight: 50.0),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "$b",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  //buttns1,2
 
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            height: 35.0,
-                            child: RaisedButton(
-                              onPressed: () {
-                                checkRes(c);
-                              },
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(80.0)),
-                              padding: EdgeInsets.all(0.0),
-                              child: Ink(
-                                decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        Color(0xff374ABE),
-                                        Color(0xff64B6FF)
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                    borderRadius:
-                                    BorderRadius.circular(30.0)),
-                                child: Container(
-                                  constraints: const BoxConstraints(
-                                      maxWidth: 250.0, minHeight: 50.0),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "$c",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15),
-                                  ),
+                          SizedBox(
+                            height: 50,
+                          ),
+                          Container(
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Score :$_score',
+                                  style: TextStyle(fontSize: 24),
                                 ),
-                              ),
+                                SizedBox(
+                                  height: 50,
+                                ),
+                                if (showMsg == true)
+                                  Center(
+                                    child: Image.asset(
+                                      'img/anim2.gif',
+                                      height: 150,
+                                      width: 200,
+                                    ),
+                                  )
+                                // showCongoMsg()
+                                else
+                                  Center(
+                                    child: Image.asset(
+                                      'img/anim3.gif',
+                                      height: 150,
+                                      width: 200,
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 35.0,
-                            child: RaisedButton(
-                              onPressed: () {
-                                checkRes(d);
-                              },
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(80.0)),
-                              padding: EdgeInsets.all(0.0),
-                              child: Ink(
-                                decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        Color(0xff374ABE),
-                                        Color(0xff64B6FF)
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.all(15),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(
+                                        _diceList[_index1],
+                                        height: 70,
+                                        width: 70,
+                                      ),
                                     ),
-                                    borderRadius:
-                                    BorderRadius.circular(30.0)),
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                      maxWidth: 250.0, minHeight: 50.0),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "$d",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(
+                                        'img/plus.JPG',
+                                        height: 60,
+                                        width: 60,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(
+                                        _diceList[_index2],
+                                        height: 70,
+                                        width: 70,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          // Text('sum :$_sum',style: TextStyle(fontSize: 20),),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    height: 35.0,
+                                    child: RaisedButton(
+                                      onPressed: () {
+                                        checkRes(a);
+                                      },
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(80.0)),
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Ink(
+                                        decoration: BoxDecoration(
+                                            gradient: const LinearGradient(
+                                              colors: [
+                                                Color(0xff374ABE),
+                                                Color(0xff64B6FF)
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                            borderRadius:
+                                            BorderRadius.circular(30.0)),
+                                        child: Container(
+                                          constraints: const BoxConstraints(
+                                              maxWidth: 250.0, minHeight: 50.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "$a",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    height: 35.0,
+                                    child: RaisedButton(
+                                      onPressed: () {
+                                        checkRes(b);
+                                      },
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(80.0)),
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Ink(
+                                        decoration: BoxDecoration(
+                                            gradient: const LinearGradient(
+                                              colors: [
+                                                Color(0xff374ABE),
+                                                Color(0xff64B6FF)
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                            borderRadius:
+                                            BorderRadius.circular(30.0)),
+                                        child: Container(
+                                          constraints: const BoxConstraints(
+                                              maxWidth: 250.0, minHeight: 50.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "$b",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  //buttns3,4
-                  ElevatedButton(
-                      onPressed: _rollTheDice, child: Text("Roll")),
-                ],
-              ),
+                          //buttns1,2
+
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    height: 35.0,
+                                    child: RaisedButton(
+                                      onPressed: () {
+                                        checkRes(c);
+                                      },
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(80.0)),
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Ink(
+                                        decoration: BoxDecoration(
+                                            gradient: const LinearGradient(
+                                              colors: [
+                                                Color(0xff374ABE),
+                                                Color(0xff64B6FF)
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                            borderRadius:
+                                            BorderRadius.circular(30.0)),
+                                        child: Container(
+                                          constraints: const BoxConstraints(
+                                              maxWidth: 250.0, minHeight: 50.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "$c",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    height: 35.0,
+                                    child: RaisedButton(
+                                      onPressed: () {
+                                        checkRes(d);
+                                      },
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(80.0)),
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Ink(
+                                        decoration: BoxDecoration(
+                                            gradient: const LinearGradient(
+                                              colors: [
+                                                Color(0xff374ABE),
+                                                Color(0xff64B6FF)
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                            borderRadius:
+                                            BorderRadius.circular(30.0)),
+                                        child: Container(
+                                          constraints: BoxConstraints(
+                                              maxWidth: 250.0, minHeight: 50.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "$d",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          //buttns3,4
+                          ElevatedButton(
+                              onPressed: _rollTheDice, child: Text("Roll")),
+                        ],
+                      );
+                    }),
+              );
+          }),
 
 
     );
@@ -418,7 +453,7 @@ class _DemoPageState extends State<DemoPage> {
         _title = 'legend';
       }
     }
-    _saveLastScore(_higestScore);
+    // _saveLastScore(_higestScore);
 
     setState(() {
       _index1 = _random.nextInt(9);
@@ -611,26 +646,11 @@ class _DemoPageState extends State<DemoPage> {
 
     // _rollTheDice();
   }
-
-  void _saveLastScore(int score) async {
-    final prefs = await SharedPreferences.getInstance();
-    final key = 'my_int_key';
-    final value = score;
-    prefs.setInt(key, value);
-  }
-
-  // _readHigestScore() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final key = 'my_int_key';
-  //   final value = prefs.getInt(key) ?? 0;
-  //   _higestScore = value;
-  // }
-
   void _storeDatatoFirebase() {
     final docRef = FirebaseFirestore.instance.collection('players').doc();
 
     _userInfoModel.name = nameS;
-    _userInfoModel.mail = FirebaseAuthService.current_user?.email;
+    _userInfoModel.mail = 'bot@gmail.com';
     _userInfoModel.titel = _title;
     _userInfoModel.achievement = _achivement;
     _userInfoModel.higest = _higestScore;
@@ -640,6 +660,22 @@ class _DemoPageState extends State<DemoPage> {
     // FirebaseFirestore.instance.collection('players').add(_userInfoModel.toMap());
     docRef.set(_userInfoModel.toMap());
   }
+
+  // void _saveLastScore(int score) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final key = 'my_int_key';
+  //   final value = score;
+  //   prefs.setInt(key, value);
+  // }
+
+  // _readHigestScore() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final key = 'my_int_key';
+  //   final value = prefs.getInt(key) ?? 0;
+  //   _higestScore = value;
+  // }
+
+
 
   // Future<String> fetchUsersDataFromSF() async {
   //   final prefs = await SharedPreferences.getInstance();

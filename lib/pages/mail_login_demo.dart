@@ -4,67 +4,36 @@ import 'dart:math';
 import 'dart:ui';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
 import 'package:random_number_game/auth/firebase_auth.dart';
+import 'package:random_number_game/custom_widget/custom_drawer.dart';
 import 'package:random_number_game/models/players_models.dart';
-import 'package:random_number_game/pages/demo_page.dart';
-import 'package:random_number_game/pages/log.dart';
-import 'package:random_number_game/pages/fb_login_page.dart';
-import 'package:random_number_game/pages/login_page.dart';
-import 'package:random_number_game/pages/louncher_page.dart';
-import 'package:random_number_game/pages/mail_login_demo.dart';
-import 'package:random_number_game/pages/player_dashboard.dart';
-import 'package:random_number_game/pages/profile_page.dart';
-import 'package:random_number_game/pages/register_user.dart';
 import 'package:random_number_game/pages/splash_screen.dart';
 
 
-import 'custom_widget/custom_drawer.dart';
+class DemoPage2 extends StatefulWidget {
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  String nameFromGoogle='';
+  String emailFromGoogle='';
 
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: Scaffold(
-      body: HomePage(),
-    ),
-    initialRoute: SplashScreen.routeName,
-    routes: {
-      SplashScreen.routeName: (context) => SplashScreen(),
-      LauncherPage.routeName: (context) => LauncherPage(),
-      PlayerDashboard.routeName: (context) => PlayerDashboard(),
-      ProfilePage.routeName: (context) => ProfilePage(),
-      HomePage.routeName: (context) => HomePage(),
-      DemoPage.routeName: (context) => DemoPage(),
 
-      LoginPage.routeName: (context) => LoginPage(),
-      RegisterUser.routeName: (context) => RegisterUser(),
-      Log.routeName: (context) => Log(),
-    },
-  ));
-}
+  DemoPage2(this.nameFromGoogle,this.emailFromGoogle);
 
-class HomePage extends StatefulWidget {
-  static const String routeName = '/page_home';
+  static const String routeName = '/demo2';
   @override
-  _HomePageState createState() => _HomePageState();
+  _DemoPage2State createState() => _DemoPage2State();
 }
 
-class _HomePageState extends State<HomePage> {
+class _DemoPage2State extends State<DemoPage2> {
   UserInfoModel _userInfoModel = UserInfoModel();
   static FirebaseFirestore _db = FirebaseFirestore.instance;
-
   // late Timer _timer;
   int _start = 120;
-  var _score = 0;
-  var _higestScore = 0;
+  int _score = 0;
+  int _higestScore = 0;
   var _sum = 0;
   var _index1 = 0;
   var _index2 = 0;
@@ -75,7 +44,8 @@ class _HomePageState extends State<HomePage> {
   var b = 0;
   var c = 0;
   var d = 0;
-  late QueryDocumentSnapshot user;
+  // late int SCORE;
+  // late String BOT;
   bool showMsg = false;
   bool _highScoreMsg = false;
   String _title = 'Noob';
@@ -104,9 +74,10 @@ class _HomePageState extends State<HomePage> {
     'img/nm9.JPG',
   ];
 
-  ///
-  ///
+
   late FToast fToast;
+
+
   @override
   void dispose() {
     // _timer.cancel();
@@ -117,8 +88,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
-
     fToast = FToast();
     fToast.init(context);
   }
@@ -152,7 +121,6 @@ class _HomePageState extends State<HomePage> {
       body: StreamBuilder<QuerySnapshot>(
           stream: db
               .collection('players').limit(1)
-              .where('mail', isEqualTo: FirebaseAuthService.current_user!.email,)
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -167,22 +135,7 @@ class _HomePageState extends State<HomePage> {
                     itemCount: snapshot.data!.docs.length,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      user = snapshot.data!.docs[index];
-                      //
-                      // if(user['name']==null||user['score']==null){
-                      //
-                      //     BOT='BOT';
-                      //     SCORE=_higestScore;
-                      //
-                      // }
-                      // else
-                      //   {
-                      //
-                      //       BOT=user['name'];
-                      //       SCORE=user['higest'];
-                      //       print("HELLLO :"+BOT+SCORE.toString());
-                      //
-                      //   }
+                      QueryDocumentSnapshot user = snapshot.data!.docs[index];
 
                       return Column(
                         children: [
@@ -199,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 Text(
-                                  user['name'],
+                                  widget.nameFromGoogle,
 
                                   style: TextStyle(
                                     fontSize: 18,
@@ -469,6 +422,8 @@ class _HomePageState extends State<HomePage> {
                     }),
               );
           }),
+
+
     );
   }
 
@@ -491,7 +446,7 @@ class _HomePageState extends State<HomePage> {
         _title = 'legend';
       }
     }
-
+    // _saveLastScore(_higestScore);
 
     setState(() {
       _index1 = _random.nextInt(9);
@@ -536,14 +491,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   checkRes(int a) {
-
     // print(a);
     int aa = a;
     if (aa == _sum) {
       // _rollTheDice();
       setState(() {
         showMsg = true;
-        Future.delayed(const Duration(milliseconds: 500), () {
+        Future.delayed(const Duration(milliseconds: 800), () {
           setState(() {
             showMsg = false;
           });
@@ -552,7 +506,6 @@ class _HomePageState extends State<HomePage> {
       _score++;
     } else {
       print("ERROR");
-
       showToast();
     }
   }
@@ -635,16 +588,15 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
-
                     _date =
                     "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
 
                     _storeDatatoFirebase();
                     fToast.removeCustomToast();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => SplashScreen()));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (BuildContext context) => SplashScreen()));
                   },
                 ),
                 SizedBox(
@@ -663,8 +615,6 @@ class _HomePageState extends State<HomePage> {
                     _date =
                     "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
                     print(emailFromLogin);
-
-
                   },
                 ),
               ],
@@ -689,14 +639,11 @@ class _HomePageState extends State<HomePage> {
 
     // _rollTheDice();
   }
-
-
-
   void _storeDatatoFirebase() {
     final docRef = FirebaseFirestore.instance.collection('players').doc();
 
-    _userInfoModel.name = user['name'];
-    _userInfoModel.mail = FirebaseAuthService.current_user?.email;
+    _userInfoModel.name = widget.nameFromGoogle;
+    _userInfoModel.mail = widget.emailFromGoogle;
     _userInfoModel.titel = _title;
     _userInfoModel.achievement = _achivement;
     _userInfoModel.higest = _higestScore;
@@ -706,38 +653,6 @@ class _HomePageState extends State<HomePage> {
     // FirebaseFirestore.instance.collection('players').add(_userInfoModel.toMap());
     docRef.set(_userInfoModel.toMap());
   }
-
-  // Future<String> fetchUsersDataFromSF() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //
-  //   setState(() {
-  //     nameS = prefs.getString("nm")!;
-  //     idS = prefs.getString("id")!;
-  //     mailS = prefs.getString("mail")!;
-  //     emailFromLogin = prefs.getString("emailFromLoginPage")!;
-  //   });
-  //   print("Get User Value from SF:" + nameS + idS + mailS);
-  //   return emailFromLogin;
-  // }
-
-// void startTimer() {
-//   const oneSec = const Duration(seconds: 1);
-//       _timer = new Timer.periodic(
-//         oneSec,
-//             (Timer timer) {
-//           if (_start == 0) {
-//             setState(() {
-//               timer.cancel();
-//             });
-//           } else {
-//             setState(() {
-//               _start--;
-//             });
-//           }
-//         },
-//       );
-//
-// }
 
 
 }
