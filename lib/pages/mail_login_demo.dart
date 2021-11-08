@@ -8,8 +8,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:random_number_game/auth/firebase_auth.dart';
 import 'package:random_number_game/custom_widget/custom_drawer.dart';
+import 'package:random_number_game/custom_widget/google_login_controller.dart';
 import 'package:random_number_game/models/players_models.dart';
 import 'package:random_number_game/pages/splash_screen.dart';
 
@@ -52,6 +55,7 @@ class _DemoPage2State extends State<DemoPage2> {
   var _achivement = 'Concurer';
   var _date;
   final db = FirebaseFirestore.instance;
+  final controlers = Get.put(LoginController());
 
   DateTime now = DateTime.now();
   AudioPlayer player = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
@@ -113,6 +117,7 @@ class _DemoPage2State extends State<DemoPage2> {
               onPressed: () {
                 // print(FirebaseAuthService.current_user.toString());
                 FirebaseAuthService.logoutUser();
+                controlers.logout();
                 Navigator.pushReplacementNamed(context, SplashScreen.routeName);
               },
               icon: Icon(Icons.logout))

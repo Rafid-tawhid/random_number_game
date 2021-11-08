@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
   // late Timer _timer;
   int _start = 120;
   var _score = 0;
-  var _higestScore = 0;
+  int _higestScore = 0;
   var _sum = 0;
   var _index1 = 0;
   var _index2 = 0;
@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
       body: StreamBuilder<QuerySnapshot>(
           stream: db
               .collection('players').limit(1)
-              .where('mail', isEqualTo: FirebaseAuthService.current_user!.email,)
+              .where('mail', isEqualTo: FirebaseAuthService.current_user!.email)
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -168,6 +168,7 @@ class _HomePageState extends State<HomePage> {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       user = snapshot.data!.docs[index];
+                      _higestScore=user['higest'];
                       //
                       // if(user['name']==null||user['score']==null){
                       //
@@ -193,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Higest Score :$_higestScore',
+                            "Higest Score :"+user['higest'].toString(),
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
