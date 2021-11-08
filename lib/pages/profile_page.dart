@@ -26,6 +26,8 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController nameController = new TextEditingController();
   TextEditingController idController = new TextEditingController();
   TextEditingController emailController = new TextEditingController();
+  TextEditingController higestController = new TextEditingController();
+  TextEditingController dateController = new TextEditingController();
   final controler = Get.put(LoginController());
   bool showInfo=true;
   String p_name="Your Profile";
@@ -69,7 +71,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
                 decoration: BoxDecoration(
                   image: DecorationImage(
-
                     image: AssetImage("img/bg.jpg"),
                     fit: BoxFit.cover,
                   ),
@@ -78,6 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     itemBuilder: (context,index){
 
                       QueryDocumentSnapshot user=snapshot.data!.docs[index];
+                      // QueryDocumentSnapshot<int> intArr= user['higest'];
 
                       return  Column(
                         children: [
@@ -136,6 +138,30 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    controller: higestController,
+                                    textAlign: TextAlign.left,
+                                    decoration: InputDecoration(
+                                      // border: InputBorder.none,
+                                      hintText: user['higest'].toString(),
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    controller: dateController,
+                                    textAlign: TextAlign.left,
+                                    decoration: InputDecoration(
+                                      // border: InputBorder.none,
+                                      hintText: user['date'].toString(),
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
                                   child: TextField(
                                     controller: emailController,
                                     textAlign: TextAlign.left,
@@ -146,53 +172,53 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 58),
-                                  child: RaisedButton(
-                                    onPressed: (){
-                                      // print(FirebaseAuth.instance.currentUser!.email);
-                                      // saveDataToSharedPref(name, userId, city);
-                                      Navigator.pushNamed(context, HomePage.routeName);
-                                    },
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(80.0)),
-                                    padding: EdgeInsets.all(0.0),
-                                    child: Ink(
-                                      decoration: BoxDecoration(
-                                          gradient: const LinearGradient(
-                                            colors: [
-                                              Color(0xff374ABE),
-                                              Color(0xff64B6FF)
-                                            ],
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight,
-                                          ),
-                                          borderRadius: BorderRadius.circular(30.0)),
-                                      child: Container(
-                                        constraints: const BoxConstraints(
-                                            maxWidth: 200.0, minHeight: 50.0),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "Next",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.white, fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                // Padding(
+                                //   padding: const EdgeInsets.only(top: 58),
+                                //   child: RaisedButton(
+                                //     onPressed: (){
+                                //       // print(FirebaseAuth.instance.currentUser!.email);
+                                //       // saveDataToSharedPref(name, userId, city);
+                                //       Navigator.pushNamed(context, HomePage.routeName);
+                                //     },
+                                //     shape: RoundedRectangleBorder(
+                                //         borderRadius: BorderRadius.circular(80.0)),
+                                //     padding: EdgeInsets.all(0.0),
+                                //     child: Ink(
+                                //       decoration: BoxDecoration(
+                                //           gradient: const LinearGradient(
+                                //             colors: [
+                                //               Color(0xff374ABE),
+                                //               Color(0xff64B6FF)
+                                //             ],
+                                //             begin: Alignment.centerLeft,
+                                //             end: Alignment.centerRight,
+                                //           ),
+                                //           borderRadius: BorderRadius.circular(30.0)),
+                                //       child: Container(
+                                //         constraints: const BoxConstraints(
+                                //             maxWidth: 200.0, minHeight: 50.0),
+                                //         alignment: Alignment.center,
+                                //         child: Text(
+                                //           "Next",
+                                //           textAlign: TextAlign.center,
+                                //           style: TextStyle(
+                                //               color: Colors.white, fontSize: 15),
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
 
-
-                                Center(
-                                  child: Obx(() {
-                                    if (controler.googleAccount.value == null) {
-                                      return buildLoginButton();
-                                    } else {
-                                      return buildProfileView();
-                                    }
-                                  }),
-                                )
+                                //
+                                // Center(
+                                //   child: Obx(() {
+                                //     if (controler.googleAccount.value == null) {
+                                //       return buildLoginButton();
+                                //     } else {
+                                //       return buildProfileView();
+                                //     }
+                                //   }),
+                                // )
                               ],
                             ),
                           )
@@ -206,102 +232,102 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Visibility buildProfileView() {
-
-    return Visibility(
-      visible: showInfo,
-      child: Column(
-
-          children: [
-            Padding(
-
-              padding: const EdgeInsets.all(18.0),
-              child: CircleAvatar(
-                backgroundImage:
-                    Image.network(controler.googleAccount.value?.photoUrl ?? '')
-                        .image,
-                radius: 45,
-              ),
-
-            ),
-            Text(controler.googleAccount.value?.displayName ?? ''),
-            Text(controler.googleAccount.value?.email ?? ''),
-            ElevatedButton(onPressed: (){
-              setState(() {
-                showInfo=false;
-                nameController.text=controler.googleAccount.value?.displayName ?? '';
-                idController.text=controler.googleAccount.value?.id ?? '';
-                emailController.text=controler.googleAccount.value?.email ?? '';
-                imgUrl=controler.googleAccount.value?.photoUrl ?? '';
-
-              });
-            }, child: Text('Save Info')),
-
-
-          ],
-
-
-      ),
-    );
-
-  }
-
-  Padding buildLoginButton() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 158.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-
-        children: [
-          ElevatedButton(
-
-            child: Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Text(
-                'Google',
-                style: TextStyle(fontSize: 14),
-              ),
-            ),
-            onPressed: () {
-              controler.login();
-
-
-
-            },
-            style: ElevatedButton.styleFrom(
-
-              shape: CircleBorder(),
-            ),
-          ),
-          ElevatedButton(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                'facebook',
-                style: TextStyle(fontSize: 12),
-              ),
-            ),
-            onPressed: () async {
-
-              //
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Log()),
-              );
-              // await fbcontroler.login();
-              // print(fbcontroler.userData.toString());
-
-            },
-            style: ElevatedButton.styleFrom(
-              shape: CircleBorder(),
-              primary: Colors.indigoAccent,
-            ),
-
-          ),
-        ],
-      ),
-    );
-  }
+  // Visibility buildProfileView() {
+  //
+  //   return Visibility(
+  //     visible: showInfo,
+  //     child: Column(
+  //
+  //         children: [
+  //           Padding(
+  //
+  //             padding: const EdgeInsets.all(18.0),
+  //             child: CircleAvatar(
+  //               backgroundImage:
+  //                   Image.network(controler.googleAccount.value?.photoUrl ?? '')
+  //                       .image,
+  //               radius: 45,
+  //             ),
+  //
+  //           ),
+  //           Text(controler.googleAccount.value?.displayName ?? ''),
+  //           Text(controler.googleAccount.value?.email ?? ''),
+  //           ElevatedButton(onPressed: (){
+  //             setState(() {
+  //               showInfo=false;
+  //               nameController.text=controler.googleAccount.value?.displayName ?? '';
+  //               idController.text=controler.googleAccount.value?.id ?? '';
+  //               emailController.text=controler.googleAccount.value?.email ?? '';
+  //               imgUrl=controler.googleAccount.value?.photoUrl ?? '';
+  //
+  //             });
+  //           }, child: Text('Save Info')),
+  //
+  //
+  //         ],
+  //
+  //
+  //     ),
+  //   );
+  //
+  // }
+  //
+  // Padding buildLoginButton() {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(top: 158.0),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //
+  //       children: [
+  //         ElevatedButton(
+  //
+  //           child: Padding(
+  //             padding: const EdgeInsets.all(18.0),
+  //             child: Text(
+  //               'Google',
+  //               style: TextStyle(fontSize: 14),
+  //             ),
+  //           ),
+  //           onPressed: () {
+  //             controler.login();
+  //
+  //
+  //
+  //           },
+  //           style: ElevatedButton.styleFrom(
+  //
+  //             shape: CircleBorder(),
+  //           ),
+  //         ),
+  //         ElevatedButton(
+  //           child: Padding(
+  //             padding: const EdgeInsets.all(20.0),
+  //             child: Text(
+  //               'facebook',
+  //               style: TextStyle(fontSize: 12),
+  //             ),
+  //           ),
+  //           onPressed: () async {
+  //
+  //             //
+  //             Navigator.push(
+  //               context,
+  //               MaterialPageRoute(builder: (context) => Log()),
+  //             );
+  //             // await fbcontroler.login();
+  //             // print(fbcontroler.userData.toString());
+  //
+  //           },
+  //           style: ElevatedButton.styleFrom(
+  //             shape: CircleBorder(),
+  //             primary: Colors.indigoAccent,
+  //           ),
+  //
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   // void saveDataToSharedPref(String name, String userId, String email) async {
   //   var sharedPreferences = await SharedPreferences.getInstance();

@@ -10,6 +10,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:random_number_game/auth/firebase_auth.dart';
 import 'package:random_number_game/custom_widget/custom_drawer.dart';
+import 'package:random_number_game/custom_widget/custom_drawer_2.dart';
 import 'package:random_number_game/models/players_models.dart';
 import 'package:random_number_game/pages/splash_screen.dart';
 
@@ -93,7 +94,7 @@ class _DemoPageState extends State<DemoPage> {
 
     return Scaffold(
       drawer: Drawer(
-        child: CustomDrawer(),
+        child: CustomDrawer2(),
       ),
       appBar: AppBar(
         title: const Text(

@@ -262,7 +262,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Padding buildLoginButton() {
     return Padding(
-      padding: const EdgeInsets.only(top: 158.0),
+      padding: const EdgeInsets.only(top: 58.0,bottom: 58),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
 
@@ -285,31 +285,31 @@ class _LoginPageState extends State<LoginPage> {
               shape: CircleBorder(),
             ),
           ),
-          ElevatedButton(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                'facebook',
-                style: TextStyle(fontSize: 12),
-              ),
-            ),
-            onPressed: () async {
-
-              //
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Log()),
-              );
-              // await fbcontroler.login();
-              // print(fbcontroler.userData.toString());
-
-            },
-            style: ElevatedButton.styleFrom(
-              shape: CircleBorder(),
-              primary: Colors.indigoAccent,
-            ),
-
-          ),
+          // ElevatedButton(
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(20.0),
+          //     child: Text(
+          //       'facebook',
+          //       style: TextStyle(fontSize: 12),
+          //     ),
+          //   ),
+          //   onPressed: () async {
+          //
+          //     //
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => Log()),
+          //     );
+          //     // await fbcontroler.login();
+          //     // print(fbcontroler.userData.toString());
+          //
+          //   },
+          //   style: ElevatedButton.styleFrom(
+          //     shape: CircleBorder(),
+          //     primary: Colors.indigoAccent,
+          //   ),
+          //
+          // ),
         ],
       ),
     );

@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
       body: StreamBuilder<QuerySnapshot>(
           stream: db
               .collection('players')
-              .where('mail', isEqualTo: FirebaseAuthService.current_user!.email,)
+              .where('mail', isEqualTo: FirebaseAuthService.current_user!.email)
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -170,8 +170,6 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     user = snapshot.data!.docs[index];
                     _higestScore=user['higest'];
-
-
 
                     //
                     // if(user['name']==null||user['score']==null){
@@ -704,8 +702,7 @@ class _HomePageState extends State<HomePage> {
     // _rollTheDice();
   }
 
-
-
+  
   void _storeDatatoFirebase() {
     final docRef = FirebaseFirestore.instance.collection('players').doc();
 
@@ -752,6 +749,8 @@ class _HomePageState extends State<HomePage> {
 //       );
 //
 // }
+
+
 
 
 }
