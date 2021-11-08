@@ -2,11 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:random_number_game/auth/firebase_auth.dart';
+import 'package:random_number_game/controllers/login_controller.dart';
+import 'package:random_number_game/custom_widget/google_login_controller.dart';
+import 'package:random_number_game/pages/mail_login_demo.dart';
 import 'package:random_number_game/pages/register_user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
+import 'log.dart';
 
 class LoginPage extends StatefulWidget {
   static const String routeName='/loginPage';
@@ -20,10 +26,16 @@ class _LoginPageState extends State<LoginPage> {
 
 
   late String nameS,idS,emailS,errorMsg='';
+  static String googleSignInMail='';
+  static String googleSignInName='';
+  static String googleSignInImage='';
   TextEditingController emailController = new TextEditingController();
   TextEditingController passController = new TextEditingController();
   final db = FirebaseFirestore.instance;
   late String email,pass,emailFromLoginPage;
+  final controlers = Get.put(LoginController());
+  bool showInfo=true;
+  String p_name="Your Profile";
 
   final _formKey=GlobalKey<FormState>();
   @override
@@ -148,6 +160,15 @@ class _LoginPageState extends State<LoginPage> {
                         },
                       ),
                     ),
+                    Center(
+                      child: Obx(() {
+                        if (controlers.googleAccount.value == null) {
+                          return buildLoginButton();
+                        } else {
+                          return buildProfileView();
+                        }
+                      }),
+                    )
 
 
 
@@ -183,13 +204,123 @@ class _LoginPageState extends State<LoginPage> {
     }
 
   }
+  Visibility buildProfileView() {
+
+    return Visibility(
+      visible: showInfo,
+      child: Column(
+
+        children: [
+          Padding(
+
+            padding: const EdgeInsets.all(18.0),
+            child: CircleAvatar(
+              backgroundImage:
+              Image.network(controlers.googleAccount.value?.photoUrl ?? '')
+                  .image,
+              radius: 45,
+            ),
+
+          ),
+
+          Text(controlers.googleAccount.value?.displayName ?? ''),
+          Text(controlers.googleAccount.value?.email ?? ''),
+          ElevatedButton(onPressed: (){
+            setState(() async {
+              showInfo=false;
+              googleSignInName=controlers.googleAccount.value?.displayName ?? '';
+              // idController.text=controlers.googleAccount.value?.id ?? '';
+              googleSignInMail=controlers.googleAccount.value?.email ?? '';
+              googleSignInImage=controlers.googleAccount.value?.photoUrl ?? '';
+              // loginUser(googleSignInMail,'123456');
+
+              try{
+                final user= await FirebaseAuthService.signUpUser(googleSignInMail, '123456');
+                // saveDataToSharedPref(name, FirebaseAuthService.current_user!.uid, email);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>DemoPage2(googleSignInName,googleSignInMail)));
+                if(user!=null){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>DemoPage2(googleSignInName,googleSignInMail)));
+                }
+              }
+              on FirebaseAuthException catch (e){
+                setState(() {
+                  errorMsg=e.message!;
+                });
+              }
+
+            });
+          }, child: Text('Save Info'),),
 
 
-  void saveDataToSharedPref(String email) async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("emailFromLoginPage", email);
+        ],
+
+
+      ),
+    );
 
   }
+
+  Padding buildLoginButton() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 158.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+
+        children: [
+          ElevatedButton(
+
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Text(
+                'Google',
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+            onPressed: () {
+              controlers.login();
+
+            },
+            style: ElevatedButton.styleFrom(
+
+              shape: CircleBorder(),
+            ),
+          ),
+          ElevatedButton(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                'facebook',
+                style: TextStyle(fontSize: 12),
+              ),
+            ),
+            onPressed: () async {
+
+              //
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Log()),
+              );
+              // await fbcontroler.login();
+              // print(fbcontroler.userData.toString());
+
+            },
+            style: ElevatedButton.styleFrom(
+              shape: CircleBorder(),
+              primary: Colors.indigoAccent,
+            ),
+
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  // void saveDataToSharedPref(String email) async {
+  //   var sharedPreferences = await SharedPreferences.getInstance();
+  //   sharedPreferences.setString("emailFromLoginPage", email);
+  //
+  // }
 
 
 }
