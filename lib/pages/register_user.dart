@@ -5,7 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:random_number_game/auth/firebase_auth.dart';
 import 'package:random_number_game/main.dart';
+import 'package:random_number_game/pages/demo_reg.dart';
 import 'package:random_number_game/pages/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class RegisterUser extends StatefulWidget {
@@ -131,11 +133,14 @@ class _RegisterUserState extends State<RegisterUser> {
                       });
 
                       try{
+
+                        saveDataToSharedPref(name, email);
+
                        final user= await FirebaseAuthService.signUpUser(email, pass);
                         // saveDataToSharedPref(name, FirebaseAuthService.current_user!.uid, email);
-                        Navigator.pushReplacementNamed(context, HomePage.routeName);
+                        Navigator.pushReplacementNamed(context, DemoReg.routeName);
                         if(user!=null){
-                          Navigator.pushReplacementNamed(context, HomePage.routeName);
+                          Navigator.pushReplacementNamed(context, DemoReg.routeName);
                         }
                       }
                       on FirebaseAuthException catch (e){
@@ -144,12 +149,12 @@ class _RegisterUserState extends State<RegisterUser> {
                         });
                       }
 
-                       Navigator.pushReplacementNamed(context, HomePage.routeName);
+
                     },
                   ),
                 ),
 
-                Text('$errorMsg',style: TextStyle(color: Colors.red),),
+                Text(errorMsg,style: TextStyle(color: Colors.red),),
 
 
               ],
@@ -163,11 +168,10 @@ class _RegisterUserState extends State<RegisterUser> {
       )
     );
   }
-  // void saveDataToSharedPref(String name, String userId, String email) async {
-  //   var sharedPreferences = await SharedPreferences.getInstance();
-  //   sharedPreferences.setString("nm", name);
-  //   sharedPreferences.setString("id", userId);
-  //   sharedPreferences.setString("mail", email);
-  //   print("saved user value to SF from Register Page");
-  // }
+  void saveDataToSharedPref(String name, String email) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("nm", name);
+    sharedPreferences.setString("mail", email);
+    print("saved user value to SF from Register Page");
+  }
 }
