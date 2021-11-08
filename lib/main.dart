@@ -60,11 +60,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   UserInfoModel _userInfoModel = UserInfoModel();
   static FirebaseFirestore _db = FirebaseFirestore.instance;
+  List pUser = [];
 
   // late Timer _timer;
   int _start = 120;
   var _score = 0;
-  int _higestScore = 0;
+  int _higestScore = 0 ;
   var _sum = 0;
   var _index1 = 0;
   var _index2 = 0;
@@ -151,8 +152,8 @@ class _HomePageState extends State<HomePage> {
       ),
       body: StreamBuilder<QuerySnapshot>(
           stream: db
-              .collection('players').limit(1)
-              .where('mail', isEqualTo: FirebaseAuthService.current_user!.email)
+              .collection('players')
+              .where('mail', isEqualTo: FirebaseAuthService.current_user!.email,)
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -162,30 +163,37 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             } else
-              return SingleChildScrollView(
-                child: ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      user = snapshot.data!.docs[index];
-                      _higestScore=user['higest'];
-                      //
-                      // if(user['name']==null||user['score']==null){
-                      //
-                      //     BOT='BOT';
-                      //     SCORE=_higestScore;
-                      //
-                      // }
-                      // else
-                      //   {
-                      //
-                      //       BOT=user['name'];
-                      //       SCORE=user['higest'];
-                      //       print("HELLLO :"+BOT+SCORE.toString());
-                      //
-                      //   }
+              return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  shrinkWrap: true,
+                  physics: new NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    user = snapshot.data!.docs[index];
+                    _higestScore=user['higest'];
 
-                      return Column(
+
+
+                    //
+                    // if(user['name']==null||user['score']==null){
+                    //
+                    //     BOT='BOT';
+                    //     SCORE=_higestScore;
+                    //
+                    // }
+                    // else
+                    //   {
+                    //
+                    //       BOT=user['name'];
+                    //       SCORE=user['higest'];
+                    //       print("HELLLO :"+BOT+SCORE.toString());
+                    //
+                    //   }
+
+                    return Container(
+                      height: double.maxFinite,
+                      width: double.maxFinite,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
                             padding:
@@ -195,6 +203,7 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Text(
                             "Higest Score :"+user['higest'].toString(),
+
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -465,10 +474,11 @@ class _HomePageState extends State<HomePage> {
                           //buttns3,4
                           ElevatedButton(
                               onPressed: _rollTheDice, child: Text("Roll")),
+
                         ],
-                      );
-                    }),
-              );
+                      ),
+                    );
+                  });
           }),
     );
   }
@@ -637,6 +647,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   onPressed: () {
 
+                    _higestScore = _score;
                     _date =
                     "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
 
@@ -660,6 +671,8 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
+
+
                     customToastShow();
                     _date =
                     "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
