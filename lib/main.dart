@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
@@ -86,7 +87,7 @@ class _HomePageState extends State<HomePage> {
   var d = 0;
   late QueryDocumentSnapshot user;
   bool showMsg = false;
-  bool _highScoreOfUser = false;
+  bool hideNumber = true;
   String _title = 'Noob';
   var _achivement = 'Concurer';
   var _date;
@@ -177,22 +178,13 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     user = snapshot.data!.docs[index];
                     _higestScore=user['higest'];
-                    
-                    //
-                    // if(user['name']==null||user['score']==null){
-                    //
-                    //     BOT='BOT';
-                    //     SCORE=_higestScore;
-                    //
-                    // }
-                    // else
+                    // List<int> list=[];
+                    // for(int i=0;i<snapshot.data!.size;i++)
                     //   {
-                    //
-                    //       BOT=user['name'];
-                    //       SCORE=user['higest'];
-                    //       print("HELLLO :"+BOT+SCORE.toString());
-                    //
+                    //     list[i] =user['higest'];
+                    //     print("O MY GOSH :"+list[1].toString());
                     //   }
+
 
                     return Container(
                       height: double.maxFinite,
@@ -258,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
 
-                          Row(
+                         if(hideNumber) Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Container(
@@ -295,190 +287,194 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                           // Text('sum :$_sum',style: TextStyle(fontSize: 20),),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    height: 35.0,
-                                    child: RaisedButton(
-                                      onPressed: () {
-                                        checkRes(a);
-                                      },
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(80.0)),
-                                      padding: EdgeInsets.all(0.0),
-                                      child: Ink(
-                                        decoration: BoxDecoration(
-                                            gradient: const LinearGradient(
-                                              colors: [
-                                                Color(0xff374ABE),
-                                                Color(0xff64B6FF)
-                                              ],
-                                              begin: Alignment.centerLeft,
-                                              end: Alignment.centerRight,
+                          if(hideNumber)Column(
+                            children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        height: 35.0,
+                                        child: RaisedButton(
+                                          onPressed: () {
+                                            checkRes(a);
+                                          },
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(80.0)),
+                                          padding: EdgeInsets.all(0.0),
+                                          child: Ink(
+                                            decoration: BoxDecoration(
+                                                gradient: const LinearGradient(
+                                                  colors: [
+                                                    Color(0xff374ABE),
+                                                    Color(0xff64B6FF)
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                ),
+                                                borderRadius:
+                                                BorderRadius.circular(30.0)),
+                                            child: Container(
+                                              constraints: const BoxConstraints(
+                                                  maxWidth: 250.0, minHeight: 50.0),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "$a",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15),
+                                              ),
                                             ),
-                                            borderRadius:
-                                            BorderRadius.circular(30.0)),
-                                        child: Container(
-                                          constraints: const BoxConstraints(
-                                              maxWidth: 250.0, minHeight: 50.0),
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            "$a",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    height: 35.0,
-                                    child: RaisedButton(
-                                      onPressed: () {
-                                        checkRes(b);
-                                      },
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(80.0)),
-                                      padding: EdgeInsets.all(0.0),
-                                      child: Ink(
-                                        decoration: BoxDecoration(
-                                            gradient: const LinearGradient(
-                                              colors: [
-                                                Color(0xff374ABE),
-                                                Color(0xff64B6FF)
-                                              ],
-                                              begin: Alignment.centerLeft,
-                                              end: Alignment.centerRight,
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        height: 35.0,
+                                        child: RaisedButton(
+                                          onPressed: () {
+                                            checkRes(b);
+                                          },
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(80.0)),
+                                          padding: EdgeInsets.all(0.0),
+                                          child: Ink(
+                                            decoration: BoxDecoration(
+                                                gradient: const LinearGradient(
+                                                  colors: [
+                                                    Color(0xff374ABE),
+                                                    Color(0xff64B6FF)
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                ),
+                                                borderRadius:
+                                                BorderRadius.circular(30.0)),
+                                            child: Container(
+                                              constraints: const BoxConstraints(
+                                                  maxWidth: 250.0, minHeight: 50.0),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "$b",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15),
+                                              ),
                                             ),
-                                            borderRadius:
-                                            BorderRadius.circular(30.0)),
-                                        child: Container(
-                                          constraints: const BoxConstraints(
-                                              maxWidth: 250.0, minHeight: 50.0),
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            "$b",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                          //buttns1,2
+                              ),
+                              //buttns1,2
 
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    height: 35.0,
-                                    child: RaisedButton(
-                                      onPressed: () {
-                                        checkRes(c);
-                                      },
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(80.0)),
-                                      padding: EdgeInsets.all(0.0),
-                                      child: Ink(
-                                        decoration: BoxDecoration(
-                                            gradient: const LinearGradient(
-                                              colors: [
-                                                Color(0xff374ABE),
-                                                Color(0xff64B6FF)
-                                              ],
-                                              begin: Alignment.centerLeft,
-                                              end: Alignment.centerRight,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        height: 35.0,
+                                        child: RaisedButton(
+                                          onPressed: () {
+                                            checkRes(c);
+                                          },
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(80.0)),
+                                          padding: EdgeInsets.all(0.0),
+                                          child: Ink(
+                                            decoration: BoxDecoration(
+                                                gradient: const LinearGradient(
+                                                  colors: [
+                                                    Color(0xff374ABE),
+                                                    Color(0xff64B6FF)
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                ),
+                                                borderRadius:
+                                                BorderRadius.circular(30.0)),
+                                            child: Container(
+                                              constraints: const BoxConstraints(
+                                                  maxWidth: 250.0, minHeight: 50.0),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "$c",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15),
+                                              ),
                                             ),
-                                            borderRadius:
-                                            BorderRadius.circular(30.0)),
-                                        child: Container(
-                                          constraints: const BoxConstraints(
-                                              maxWidth: 250.0, minHeight: 50.0),
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            "$c",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    height: 35.0,
-                                    child: RaisedButton(
-                                      onPressed: () {
-                                        checkRes(d);
-                                      },
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(80.0)),
-                                      padding: EdgeInsets.all(0.0),
-                                      child: Ink(
-                                        decoration: BoxDecoration(
-                                            gradient: const LinearGradient(
-                                              colors: [
-                                                Color(0xff374ABE),
-                                                Color(0xff64B6FF)
-                                              ],
-                                              begin: Alignment.centerLeft,
-                                              end: Alignment.centerRight,
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        height: 35.0,
+                                        child: RaisedButton(
+                                          onPressed: () {
+                                            checkRes(d);
+                                          },
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(80.0)),
+                                          padding: EdgeInsets.all(0.0),
+                                          child: Ink(
+                                            decoration: BoxDecoration(
+                                                gradient: const LinearGradient(
+                                                  colors: [
+                                                    Color(0xff374ABE),
+                                                    Color(0xff64B6FF)
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                ),
+                                                borderRadius:
+                                                BorderRadius.circular(30.0)),
+                                            child: Container(
+                                              constraints: BoxConstraints(
+                                                  maxWidth: 250.0, minHeight: 50.0),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "$d",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15),
+                                              ),
                                             ),
-                                            borderRadius:
-                                            BorderRadius.circular(30.0)),
-                                        child: Container(
-                                          constraints: BoxConstraints(
-                                              maxWidth: 250.0, minHeight: 50.0),
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            "$d",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                              //buttns3,4
+                              ElevatedButton(
+                                  onPressed: _rollTheDice, child: Text("Roll")),
+                            ],
                           ),
-                          //buttns3,4
-                          ElevatedButton(
-                              onPressed: _rollTheDice, child: Text("Roll")),
 
                         ],
                       ),
@@ -507,7 +503,6 @@ class _HomePageState extends State<HomePage> {
         _title = 'legend';
       }
     }
-
     setState(() {
       _index1 = _random.nextInt(9);
       _index2 = _random.nextInt(9);
@@ -524,6 +519,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void suffle(int rand1, int rand2, int rand3, int sum) {
+
     if (rand1 == rand2) {
       _rand2 = _rand2 + 1;
     }
@@ -558,9 +554,11 @@ class _HomePageState extends State<HomePage> {
       // _rollTheDice();
       setState(() {
         showMsg = true;
+        hideNumber=false;
         Future.delayed(const Duration(milliseconds: 500), () {
           setState(() {
             showMsg = false;
+            hideNumber=true;
           });
         });
       });

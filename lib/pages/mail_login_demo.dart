@@ -19,8 +19,8 @@ import 'package:random_number_game/pages/splash_screen.dart';
 
 class DemoPage2 extends StatefulWidget {
 
-  String nameFromGoogle='';
-  String emailFromGoogle='';
+  String nameFromGoogle='HELLO';
+  String emailFromGoogle='HI';
 
 
   DemoPage2(this.nameFromGoogle,this.emailFromGoogle);
