@@ -36,8 +36,6 @@ class _DemoRegState extends State<DemoReg> {
   var b = 0;
   var c = 0;
   var d = 0;
-  // late int SCORE;
-  // late String BOT;
   bool showMsg = false;
   bool hideNumber = true;
   String _title = 'Noob';
@@ -71,8 +69,11 @@ class _DemoRegState extends State<DemoReg> {
   @override
   void dispose() {
     // _timer.cancel();
-    super.dispose();
+
   }
+
+
+
 
 
   @override
@@ -83,6 +84,7 @@ class _DemoRegState extends State<DemoReg> {
     fetchUsersDataFromSF();
 
   }
+
 
 
 
@@ -655,6 +657,18 @@ class _DemoRegState extends State<DemoReg> {
     docRef.set(_userInfoModel.toMap());
   }
 
+  _storeDatatoFirebaseWithZero(){
+    final docRef = FirebaseFirestore.instance.collection('players').doc();
+    _userInfoModel.name = nameFromReg;
+    _userInfoModel.mail = mailFromReg;
+    _userInfoModel.higest = _higestScore;
+    _userInfoModel.date = _date;
+    _userInfoModel.score = _score;
+    _userInfoModel.id = docRef.id;
+    docRef.set(_userInfoModel.toMap());
+    print("_storeDatatoFirebaseWithZero()");
+  }
+
 
 Future<String> fetchUsersDataFromSF() async {
   final prefs = await SharedPreferences.getInstance();
@@ -662,6 +676,7 @@ Future<String> fetchUsersDataFromSF() async {
     nameFromReg = prefs.getString("nm")!;
     mailFromReg  = prefs.getString("mail")!;
     print(nameFromReg+mailFromReg);
+    _storeDatatoFirebaseWithZero();
   });
   print("Get User Value from SF:");
   return mailFromReg;

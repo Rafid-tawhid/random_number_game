@@ -131,10 +131,8 @@ class _RegisterUserState extends State<RegisterUser> {
                         pass = passController.text;
                         name = nameController.text;
                       });
-
+                      saveDataToSharedPref(name, email);
                       try{
-
-                        saveDataToSharedPref(name, email);
 
                        final user= await FirebaseAuthService.signUpUser(email, pass);
                         // saveDataToSharedPref(name, FirebaseAuthService.current_user!.uid, email);
